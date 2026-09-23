@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>KiKi Post</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background: #ffffff;
+
+            color: #151515;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+        }
+
+
+        .post-page {
+
+            width: min(
+                900px,
+                calc(100% - 30px)
+            );
+
+            margin: 30px auto 60px;
+
+        }
+
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 18px;
+
+            padding: 9px 15px;
+
+            border: 1px solid #e5e5e5;
+
+            border-radius: 100px;
+
+            background: #ffffff;
+
+            color: #151515;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            background: #f3f3f3;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        /* =========================
+           POST CARD
+        ========================= */
+
+        .post-card {
+
+            background: #ffffff;
+
+            border: 1px solid #e7e7e7;
+
+            border-radius: 22px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(0, 0, 0, 0.04);
+
+        }
+
+.reply {
+    margin-left: 45px;
+}
+
+.reply-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.reply-input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #181818;
+    color: white;
+    outline: none;
+}
+
+.reply-submit,
+.reply-cancel {
+    border: none;
+    border-radius: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+.reply-submit {
+    background: white;
+    color: black;
+}
+
+.reply-cancel {
+    background: #292929;
+    color: white;
+}
+
+
+        /* =========================
+           AUTHOR
+        ========================= */
+
+        .post-author {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .post-avatar {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            display: block;
+
+            flex-shrink: 0;
+
+            background: #eeeeee;
+
+        }
+
+
+        .author-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 3px;
+
+        }
+
+
+        .author-name {
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+        }
+
+
+        .author-meta {
+
+            color: #999999;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =========================
+           POST CONTENT
+        ========================= */
+
+        .post-title {
+
+            margin: 0 0 12px;
+
+            font-size: 25px;
+
+            line-height: 1.3;
+
+        }
+
+
+        .post-content {
+
+            margin: 0;
+
+            color: #444444;
+
+            font-size: 14px;
+
+            line-height: 1.8;
+
+            white-space: pre-wrap;
+
+        }
+
+
+        .post-image {
+
+            display: block;
+
+            width: 100%;
+
+            max-height: 600px;
+
+            margin-top: 20px;
+
+            border-radius: 16px;
+
+            object-fit: cover;
+
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .post-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 25px;
+
+            padding-top: 18px;
+
+            border-top: 1px solid #eeeeee;
+
+        }
+
+
+        .post-action {
+
+            border: none;
+
+            background: transparent;
+
+            color: #555555;
+
+            padding: 9px 13px;
+
+            border-radius: 100px;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            transition:
+                background 0.2s ease;
+
+        }
+
+
+        .post-action:hover {
+
+            background: #f2f2f2;
+
+        }
+
+
+        .post-action.liked {
+
+            color: #151515;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =========================
+           COMMENTS
+        ========================= */
+
+        .comments-section {
+
+            margin-top: 25px;
+
+            background: #ffffff;
+
+            border: 1px solid #e7e7e7;
+
+            border-radius: 22px;
+
+            padding: 25px;
+
+        }
+
+
+        .comments-title {
+
+            margin: 0 0 20px;
+
+            font-size: 18px;
+
+        }
+
+
+        .comment-form {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .comment-input {
+
+            flex: 1;
+
+            min-width: 0;
+
+            border: 1px solid #dddddd;
+
+            border-radius: 100px;
+
+            padding: 12px 16px;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+        }
+
+
+        .comment-input:focus {
+
+            border-color: #151515;
+
+        }
+
+
+        .comment-submit {
+
+            border: none;
+
+            border-radius: 100px;
+
+            padding: 10px 17px;
+
+            background: #151515;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+        }
+
+
+        .comment-submit:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .comment {
+
+            display: flex;
+
+            gap: 11px;
+
+            padding: 17px 0;
+
+            border-top: 1px solid #eeeeee;
+
+        }
+
+
+        .comment-avatar {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .comment-body {
+
+            min-width: 0;
+
+            flex: 1;
+
+        }
+
+
+        .comment-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .comment-name {
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+        }
+
+
+        .comment-date {
+
+            color: #999999;
+
+            font-size: 11px;
+
+        }
+
+
+        .comment-content {
+
+            margin: 5px 0 0;
+
+            color: #444444;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            white-space: pre-wrap;
+
+        }
+
+
+        .reply-button {
+
+            border: none;
+
+            padding: 5px 0;
+
+            background: transparent;
+
+            color: #888888;
+
+            font-family: inherit;
+
+            font-size: 11px;
+
+            cursor: pointer;
+
+        }
+
+
+        .reply-button:hover {
+
+            color: #151515;
+
+        }
+
+
+        .reply {
+
+            margin-top: 10px;
+
+            margin-left: 20px;
+
+        }
+
+
+        /* =========================
+           STATES
+        ========================= */
+
+        .loading,
+        .error,
+        .empty {
+
+            padding: 50px 20px;
+
+            text-align: center;
+
+            color: #888888;
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .post-page {
+
+                width:
+                    calc(100% - 20px);
+
+                margin-top: 15px;
+
+            }
+
+
+            .post-card,
+            .comments-section {
+
+                padding: 20px;
+
+                border-radius: 18px;
+
+            }
+
+
+            .post-title {
+
+                font-size: 21px;
+
+            }
+
+
+            .comment-form {
+
+                flex-direction: column;
+
+            }
+
+
+            .comment-submit {
+
+                align-self: flex-end;
+
+            }
+
+        }
+
+.reply-form {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+    pointer-events: auto !important;
+}
+
+.reply-input {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+
+    padding: 10px 12px;
+
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    background: #181818;
+    color: white;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+    box-sizing: border-box;
+}
+
+.reply-input:focus {
+    border-color: #666;
+}
+
+.reply-submit,
+.reply-cancel {
+    pointer-events: auto !important;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="post-page">
+
+
+    <button
+        class="back-button"
+        onclick="goBackToKiKi()">
+
+        ← Back to KiKi
+
+    </button>
+
+
+    <main id="postContainer">
+
+        <div class="loading">
+            Loading post...
+        </div>
+
+    </main>
+
+
+    <section
+        id="commentsSection"
+        class="comments-section"
+        style="display: none;">
+
+        <h2 class="comments-title">
+            Comments
+        </h2>
+
+
+        <form
+            id="commentForm"
+            class="comment-form">
+
+            <input
+                id="commentInput"
+                class="comment-input"
+                type="text"
+                maxlength="2000"
+                placeholder="Write a comment..."
+                required
+            >
+
+            <button
+                id="commentSubmit"
+                class="comment-submit"
+                type="submit">
+
+                Comment
+
+            </button>
+
+        </form>
+
+
+        <div id="commentsList"></div>
+
+    </section>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+
+<script>
+
+    /*
+     * =========================================
+     * GET POST ID
+     * =========================================
+     */
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const postId =
+        params.get("id");
+
+
+    /*
+     * =========================================
+     * ESCAPE HTML
+     * =========================================
+     */
+
+    function escapeHTML(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+
+    }
+
+
+    /*
+     * =========================================
+     * BACK TO KIKI
+     * =========================================
+     */
+
+function goBackToKiKi() {
+
+    if (
+        window.parent &&
+        window.parent !== window &&
+        typeof window.parent.loadKiKiPage === "function"
+    ) {
+
+        window.parent.loadKiKiPage(
+            "home.html"
+        );
+
+        return;
+
+    }
+
+
+    window.history.back();
+
+}
+
+
+    /*
+     * =========================================
+     * LOAD POST
+     * =========================================
+     */
+
+    async function loadPost() {
+
+        const container =
+            document.getElementById(
+                "postContainer"
+            );
+
+
+        if (!postId) {
+
+            container.innerHTML = `
+                <div class="error">
+                    This post could not be found.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        const {
+            data: post,
+            error
+        } = await supabaseClient
+
+            .from("posts")
+
+            .select(`
+                id,
+                title,
+                content,
+                image_url,
+                is_staff_post,
+                created_at,
+
+                profiles!posts_author_id_fkey (
+                    display_name,
+                    username,
+                    avatar_url,
+                    is_staff
+                ),
+
+                artists (
+                    name,
+                    slug
+                )
+            `)
+
+            .eq(
+                "id",
+                postId
+            )
+
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Post loading error:",
+                error
+            );
+
+
+            container.innerHTML = `
+                <div class="error">
+                    Unable to load this post.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        const profile =
+            post.profiles;
+
+
+        const artist =
+            post.artists;
+
+
+        const avatar =
+            profile?.avatar_url ||
+            "images/default-avatar.png";
+
+
+        const displayName =
+            profile?.display_name ||
+            "KiKi user";
+
+
+        const username =
+            profile?.username
+                ? "@" + profile.username
+                : "";
+
+
+        const date =
+            new Date(
+                post.created_at
+            ).toLocaleString();
+
+
+        container.innerHTML = `
+
+            <article class="post-card">
+
+                <div class="post-author">
+
+                    <img
+                        class="post-avatar"
+                        src="${escapeHTML(avatar)}"
+                        alt=""
+                    >
+
+                    <div class="author-info">
+
+                        <span class="author-name">
+                            ${escapeHTML(displayName)}
+                        </span>
+
+                        <span class="author-meta">
+
+                            ${escapeHTML(username)}
+
+                            ${
+                                artist?.name
+                                    ? `
+                                        ·
+                                        ${escapeHTML(
+                                            artist.name
+                                        )}
+                                    `
+                                    : ""
+                            }
+
+                            ·
+                            ${escapeHTML(date)}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <h1 class="post-title">
+
+                    ${escapeHTML(
+                        post.title || ""
+                    )}
+
+                </h1>
+
+
+                <div class="post-content">
+
+                    ${escapeHTML(
+                        post.content || ""
+                    )}
+
+                </div>
+
+
+                ${
+                    post.image_url
+                        ? `
+                            <img
+                                class="post-image"
+                                src="${escapeHTML(
+                                    post.image_url
+                                )}"
+                                alt=""
+                            >
+                        `
+                        : ""
+                }
+
+
+                <div class="post-actions">
+
+                    <button
+                        id="likeButton"
+                        class="post-action">
+
+                        ♡ Like
+                        <span id="likeCount">
+                            0
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="post-action"
+                        onclick="
+                            document
+                            .getElementById(
+                                'commentInput'
+                            )
+                            .focus()
+                        ">
+
+                        💬 Comment
+
+                    </button>
+
+
+                    <button
+                        id="shareButton"
+                        class="post-action">
+
+                        ↗ Share
+
+                    </button>
+
+                </div>
+
+            </article>
+
+        `;
+
+
+        document.getElementById(
+            "commentsSection"
+        ).style.display =
+            "block";
+
+
+        await loadLikes();
+
+        await loadComments();
+
+    }
+
+
+    /*
+     * =========================================
+     * LIKES
+     * =========================================
+     */
+
+    async function loadLikes() {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+
+            .from("post_likes")
+
+            .select(
+                "*",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+
+            .eq(
+                "post_id",
+                postId
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Like count error:",
+                error
+            );
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "likeCount"
+        ).textContent =
+            count || 0;
+
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (!user) {
+            return;
+        }
+
+
+        const {
+            data: existingLike
+        } = await supabaseClient
+
+            .from("post_likes")
+
+            .select("id")
+
+            .eq(
+                "post_id",
+                postId
+            )
+
+            .eq(
+                "user_id",
+                user.id
+            )
+
+            .maybeSingle();
+
+
+        if (existingLike) {
+
+            document.getElementById(
+                "likeButton"
+            ).classList.add(
+                "liked"
+            );
+
+        }
+
+    }
+
+
+    /*
+     * =========================================
+     * LIKE / UNLIKE
+     * =========================================
+     */
+
+    document.addEventListener(
+        "click",
+        async event => {
+
+            if (
+                event.target.closest(
+                    "#likeButton"
+                )
+            ) {
+
+                await toggleLike();
+
+            }
+
+
+            if (
+                event.target.closest(
+                    "#shareButton"
+                )
+            ) {
+
+                await sharePost();
+
+            }
+
+        }
+    );
+
+
+    async function toggleLike() {
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (!user) {
+
+            window.location.href =
+                "logsignin.html";
+
+            return;
+
+        }
+
+
+        const button =
+            document.getElementById(
+                "likeButton"
+            );
+
+
+        const {
+            data: existingLike
+        } =
+            await supabaseClient
+
+                .from("post_likes")
+
+                .select("id")
+
+                .eq(
+                    "post_id",
+                    postId
+                )
+
+                .eq(
+                    "user_id",
+                    user.id
+                )
+
+                .maybeSingle();
+
+
+        if (existingLike) {
+
+            const {
+                error
+            } = await supabaseClient
+
+                .from("post_likes")
+
+                .delete()
+
+                .eq(
+                    "id",
+                    existingLike.id
+                );
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+                return;
+
+            }
+
+        } else {
+
+            const {
+                error
+            } = await supabaseClient
+
+                .from("post_likes")
+
+                .insert({
+
+                    post_id:
+                        postId,
+
+                    user_id:
+                        user.id
+
+                });
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+                return;
+
+            }
+
+        }
+
+
+        await loadLikes();
+
+    }
+
+
+    /*
+     * =========================================
+     * COMMENTS
+     * =========================================
+     */
+
+async function loadComments() {
+
+    const {
+        data: comments,
+        error
+    } = await supabaseClient
+        .from("post_comments")
+        .select(`
+            id,
+            content,
+            created_at,
+            parent_comment_id,
+            user_id,
+            profiles!post_comments_user_id_fkey (
+                display_name,
+                username,
+                avatar_url,
+                is_staff
+            )
+        `)
+        .eq("post_id", postId)
+        .order("created_at", {
+            ascending: true
+        });
+
+    if (error) {
+
+        console.error(
+            "Comment loading error:",
+            error
+        );
+
+        return;
+    }
+
+    const list =
+        document.getElementById(
+            "commentsList"
+        );
+
+    if (!comments || comments.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                No comments yet.
+                Be the first!
+            </div>
+        `;
+
+        return;
+    }
+
+    list.innerHTML = "";
+
+    /*
+     * Create comments in their original
+     * chronological order.
+     */
+    comments.forEach(comment => {
+
+        const profile =
+            comment.profiles;
+
+        const avatar =
+            profile?.avatar_url ||
+            "images/default-avatar.png";
+
+        const displayName =
+            profile?.display_name ||
+            "KiKi user";
+
+        const date =
+            new Date(
+                comment.created_at
+            ).toLocaleString();
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            comment.parent_comment_id
+                ? "comment reply"
+                : "comment";
+
+        element.dataset.commentId =
+            comment.id;
+
+        element.innerHTML = `
+
+            <img
+                class="comment-avatar"
+                src="${escapeHTML(avatar)}"
+                alt=""
+            >
+
+            <div class="comment-body">
+
+                <div class="comment-header">
+
+                    <span class="comment-name">
+                        ${escapeHTML(displayName)}
+                    </span>
+
+                    <span class="comment-date">
+                        ${escapeHTML(date)}
+                    </span>
+
+                </div>
+
+                <p class="comment-content">
+                    ${escapeHTML(comment.content)}
+                </p>
+
+		<button
+		    type="button"
+		    class="reply-button"
+		    data-comment-id="${comment.id}"
+		    onclick="openReplyBox(${comment.id})">
+		    Reply
+		</button>
+
+                <div
+                    class="reply-form-container"
+                    id="reply-form-${comment.id}">
+                </div>
+
+            </div>
+        `;
+
+        list.appendChild(element);
+    });
+
+    /*
+     * Move replies underneath their
+     * parent comments.
+     */
+    comments.forEach(comment => {
+
+        if (!comment.parent_comment_id) {
+            return;
+        }
+
+        const replyElement =
+            document.querySelector(
+                `[data-comment-id="${comment.id}"]`
+            );
+
+        const parentElement =
+            document.querySelector(
+                `[data-comment-id="${comment.parent_comment_id}"]`
+            );
+
+        if (
+            replyElement &&
+            parentElement
+        ) {
+
+            parentElement.appendChild(
+                replyElement
+            );
+        }
+    });
+}
+
+function openReplyBox(commentId) {
+
+    console.log("Reply clicked:", commentId);
+
+    const container =
+        document.getElementById(
+            `reply-form-${commentId}`
+        );
+
+    if (!container) {
+        console.error(
+            "Reply container not found:",
+            commentId
+        );
+        return;
+    }
+
+    if (container.innerHTML.trim() !== "") {
+        container.innerHTML = "";
+        return;
+    }
+
+    container.innerHTML = `
+	    <form
+	        class="reply-form"
+	        data-parent-id="${commentId}"
+    	        onsubmit="submitReply(event)"
+	    >
+            <input
+                type="text"
+                class="reply-input"
+                placeholder="Write a reply..."
+                maxlength="1000"
+                autocomplete="off"
+            >
+
+            <button
+                type="submit"
+                class="reply-submit">
+                Reply
+            </button>
+
+            <button
+                type="button"
+                class="reply-cancel"
+                onclick="this.closest('.reply-form').remove()">
+                Cancel
+            </button>
+        </form>
+    `;
+
+    const input =
+        container.querySelector(".reply-input");
+
+    if (input) {
+        input.focus();
+    }
+}
+
+async function submitReply(event) {
+
+    // Stop the form from reloading/navigating
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log("submitReply() fired");
+
+    const form = event.currentTarget;
+
+    const input =
+        form.querySelector(".reply-input");
+
+    const button =
+        form.querySelector(".reply-submit");
+
+    const content =
+        input.value.trim();
+
+    const parentCommentId =
+        form.dataset.parentId;
+
+    if (!content) {
+        return;
+    }
+
+    console.log("Reply data:", {
+        postId,
+        parentCommentId,
+        content
+    });
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+    if (userError) {
+
+        console.error(
+            "User error:",
+            userError
+        );
+
+        return;
+    }
+
+    if (!user) {
+
+        window.location.href =
+            "logsignin.html";
+
+        return;
+    }
+
+    button.disabled = true;
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("post_comments")
+            .insert({
+                post_id: postId,
+                user_id: user.id,
+                content: content,
+                parent_comment_id:
+                    Number(parentCommentId)
+            });
+
+    if (error) {
+
+        console.error(
+            "Reply error:",
+            error
+        );
+
+        button.disabled = false;
+
+        return;
+    }
+
+    console.log(
+        "Reply successfully posted!"
+    );
+
+    input.value = "";
+
+    await loadComments();
+}
+
+/*
+ * =========================================
+ * ADD COMMENT + REPLIES
+ * =========================================
+ */
+
+document.getElementById(
+    "commentForm"
+).addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+        if (!user) {
+
+            window.location.href =
+                "logsignin.html";
+
+            return;
+        }
+
+        const input =
+            document.getElementById(
+                "commentInput"
+            );
+
+        const button =
+            document.getElementById(
+                "commentSubmit"
+            );
+
+        const content =
+            input.value.trim();
+
+        if (!content) {
+            return;
+        }
+
+        button.disabled = true;
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("post_comments")
+                .insert({
+                    post_id: postId,
+                    user_id: user.id,
+                    content: content,
+                    parent_comment_id: null
+                });
+
+        if (error) {
+
+            console.error(
+                "Comment error:",
+                error
+            );
+
+            button.disabled = false;
+
+            return;
+        }
+
+        input.value = "";
+
+        button.disabled = false;
+
+        await loadComments();
+    }
+);
+
+
+/*
+ * =========================================
+ * REPLY BUTTON
+ * =========================================
+ */
+
+document.getElementById("commentsList").addEventListener(
+    "click",
+    async event => {
+
+        const replyButton =
+            event.target.closest(".reply-button");
+
+        if (!replyButton) {
+            return;
+        }
+
+        const commentId =
+            replyButton.dataset.commentId;
+
+        const container =
+            document.getElementById(
+                `reply-form-${commentId}`
+            );
+
+        if (!container) {
+            console.error(
+                "Reply container not found:",
+                commentId
+            );
+            return;
+        }
+
+        /*
+         * Close the reply box if it is already open.
+         */
+        if (container.dataset.open === "true") {
+
+            container.innerHTML = "";
+            container.dataset.open = "false";
+
+            return;
+        }
+
+        /*
+         * Create the reply form.
+         */
+        container.innerHTML = `
+            <form
+                class="reply-form"
+                data-parent-id="${commentId}"
+                autocomplete="off"
+            >
+
+                <input
+                    type="text"
+                    class="reply-input"
+                    placeholder="Write a reply..."
+                    maxlength="1000"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="submit"
+                    class="reply-submit">
+                    Reply
+                </button>
+
+                <button
+                    type="button"
+                    class="reply-cancel">
+                    Cancel
+                </button>
+
+            </form>
+        `;
+
+        container.dataset.open = "true";
+
+        /*
+         * Make sure the input can actually receive focus.
+         */
+        const input =
+            container.querySelector(".reply-input");
+
+        if (input) {
+            setTimeout(() => {
+                input.focus();
+            }, 50);
+        }
+    }
+);
+
+
+/*
+ * =========================================
+ * SUBMIT REPLY
+ * =========================================
+
+document.getElementById("commentsList").addEventListener(
+    "submit",
+    async function (event) {
+
+        const form =
+            event.target.closest(".reply-form");
+
+        if (!form) {
+            return;
+        }
+
+        // VERY IMPORTANT:
+        // Stop the browser from reloading/navigating.
+        event.preventDefault();
+        event.stopPropagation();
+
+        const input =
+            form.querySelector(".reply-input");
+
+        const button =
+            form.querySelector(".reply-submit");
+
+        const content =
+            input.value.trim();
+
+        const parentCommentId =
+            form.dataset.parentId;
+
+        if (!content) {
+            return;
+        }
+
+        console.log("Submitting reply:", {
+            content,
+            parentCommentId,
+            postId
+        });
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+        if (!user) {
+
+            window.location.href =
+                "logsignin.html";
+
+            return;
+        }
+
+        button.disabled = true;
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("post_comments")
+                .insert({
+                    post_id: postId,
+                    user_id: user.id,
+                    content: content,
+                    parent_comment_id:
+                        Number(parentCommentId)
+                });
+
+        if (error) {
+
+            console.error(
+                "Reply error:",
+                error
+            );
+
+            button.disabled = false;
+
+            return;
+        }
+
+        console.log(
+            "Reply successfully posted!"
+        );
+
+        await loadComments();
+    }
+);
+
+/*
+ * =========================================
+ * CANCEL REPLY
+ * =========================================
+ */
+
+document.getElementById(
+    "commentsList"
+).addEventListener(
+    "click",
+    event => {
+
+        if (
+            !event.target.classList.contains(
+                "reply-cancel"
+            )
+        ) {
+            return;
+        }
+
+        const form =
+            event.target.closest(
+                ".reply-form"
+            );
+
+        if (form) {
+            form.remove();
+        }
+    }
+);
+
+    /*
+     * =========================================
+     * SHARE
+     * =========================================
+     */
+
+    async function sharePost() {
+
+        const url =
+            window.location.href;
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                url
+            );
+
+
+            document.getElementById(
+                "shareButton"
+            ).textContent =
+                "✓ Copied!";
+
+
+            setTimeout(
+                () => {
+
+                    document.getElementById(
+                        "shareButton"
+                    ).textContent =
+                        "↗ Share";
+
+                },
+                1800
+            );
+
+
+        } catch {
+
+            alert(
+                "Copy this URL to share the post:\n\n" +
+                url
+            );
+
+        }
+
+    }
+
+
+    /*
+     * =========================================
+     * START
+     * =========================================
+     */
+
+    loadPost();
+
+</script>
+
+</body>
+
+</html>

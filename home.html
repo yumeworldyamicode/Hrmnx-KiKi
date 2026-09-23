@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HOME</title>
+
+    <style>
+	@import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@	0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #ffffff;
+            color: #151515;
+
+            font-family: "DM Sans", sans-serif;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================================
+           KIKI HEADER
+        ========================================================= */
+
+        .kiki-header {
+            width: 100%;
+
+            padding: 28px 45px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .kiki-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .kiki-logo {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .kiki-subtitle {
+            color: #888888;
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           COMMUNITY NAVIGATION
+        ========================================================= */
+
+        .community-navigation {
+            display: flex;
+            gap: 8px;
+
+            padding: 14px 45px;
+
+            border-bottom: 1px solid #eeeeee;
+
+            overflow-x: auto;
+        }
+
+        .community-button {
+            border: none;
+
+            background: #f5f5f5;
+            color: #555555;
+
+            border-radius: 100px;
+
+            padding: 9px 16px;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+
+            transition:
+                background 0.25s ease,
+                color 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .community-button:hover {
+            transform: translateY(-1px);
+            background: #ededed;
+        }
+
+        .community-button.active {
+            background: #151515;
+            color: white;
+        }
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.kiki-search {
+    margin-bottom: 30px;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+
+    border: 1px solid #e5e5e5;
+
+    background: #fafafa;
+
+    color: #151515;
+
+    border-radius: 16px;
+
+    padding: 16px 18px 16px 48px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+    background: white;
+
+    border-color: #151515;
+
+    box-shadow:
+        0 0 0 4px rgba(21, 21, 21, 0.05);
+}
+
+.search-icon {
+    position: absolute;
+
+    left: 18px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #999999;
+
+    font-size: 16px;
+
+    pointer-events: none;
+}
+
+.search-results {
+    margin-top: 12px;
+
+    display: none;
+
+    background: white;
+
+    border: 1px solid #e8e8e8;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.06);
+}
+
+.search-results.visible {
+    display: block;
+}
+
+.search-result {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 14px 17px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease;
+}
+
+.search-result:last-child {
+    border-bottom: none;
+}
+
+.search-result:hover {
+    background: #f8f8f8;
+}
+
+.search-result-image {
+    width: 43px;
+    height: 43px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    background: #eeeeee;
+
+    flex-shrink: 0;
+}
+
+.search-result-image.square {
+    border-radius: 10px;
+}
+
+.search-result-info {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.search-result-title {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.search-result-meta {
+    color: #999999;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.search-result-type {
+    margin-left: auto;
+
+    color: #999999;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    flex-shrink: 0;
+}
+
+.search-empty {
+    padding: 22px;
+
+    text-align: center;
+
+    color: #999999;
+
+    font-size: 13px;
+}
+
+.search-loading {
+    padding: 18px;
+
+    text-align: center;
+
+    color: #999999;
+
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+
+    .search-result {
+        padding: 13px;
+    }
+
+    .search-result-type {
+        display: none;
+    }
+
+}
+
+
+        /* =========================================================
+           MAIN FEED
+        ========================================================= */
+
+        .kiki-main {
+            width: 100%;
+            max-width: 950px;
+
+            margin: 0 auto;
+
+            padding: 35px 25px 70px;
+        }
+
+
+        /* =========================================================
+           WELCOME
+        ========================================================= */
+
+        .welcome-section {
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h1 {
+            font-size: 34px;
+            letter-spacing: -1px;
+
+            margin-bottom: 8px;
+        }
+
+        .welcome-section p {
+            color: #777777;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           POST
+        ========================================================= */
+
+        .post {
+            position: relative;
+
+            background: #ffffff;
+
+            border: 1px solid #e9e9e9;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.035);
+
+            overflow: hidden;
+        }
+
+.post {
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.post:hover {
+    transform: translateY(-2px);
+}
+
+
+        /* =========================================================
+           KIKIFFICIAL STAFF LABEL
+        ========================================================= */
+
+        .official-label {
+            display: inline-flex;
+
+            align-items: center;
+            gap: 7px;
+
+            margin-bottom: 15px;
+
+            padding: 6px 11px;
+
+            background: #f5f5f5;
+
+            border-radius: 100px;
+
+            font-size: 11px;
+            font-weight: 600;
+
+            color: #555555;
+        }
+
+        .official-label img {
+            width: 20px;
+            height: 20px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+        }
+
+
+        /* =========================================================
+           POST HEADER
+        ========================================================= */
+
+        .post-header {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 18px;
+        }
+
+        .artist-avatar {
+            width: 43px;
+            height: 43px;
+
+            border-radius: 50%;
+
+            background: #eeeeee;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            flex-shrink: 0;
+        }
+
+        .post-author {
+            display: flex;
+            flex-direction: column;
+
+            gap: 3px;
+        }
+
+        .post-author strong {
+            font-size: 14px;
+        }
+
+        .post-date {
+            color: #999999;
+            font-size: 11px;
+        }
+
+
+        /* =========================================================
+           POST CONTENT
+        ========================================================= */
+
+        .post-title {
+            font-size: 22px;
+
+            line-height: 1.3;
+
+            margin-bottom: 9px;
+        }
+
+        .translation-label {
+            display: inline-block;
+
+            margin-bottom: 16px;
+
+            color: #999999;
+
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        .post-content {
+            color: #444444;
+
+            font-size: 15px;
+
+            line-height: 1.75;
+
+            white-space: pre-line;
+        }
+
+/* =========================================================
+   USER POST COMPOSER
+========================================================= */
+
+.user-post-heading {
+    margin-bottom: 18px;
+}
+
+
+.composer-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+
+.composer-avatar {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    display: block;
+
+    flex-shrink: 0;
+
+    background: #eeeeee;
+
+    border: 1px solid #e5e5e5;
+}
+
+
+.composer-user-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.composer-user-info strong {
+    font-size: 14px;
+
+    color: #151515;
+}
+
+
+.composer-user-info span {
+    color: #999999;
+
+    font-size: 12px;
+}
+
+
+.user-post-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.user-post-form input,
+.user-post-form textarea,
+.user-post-form select {
+
+    width: 100%;
+
+    border: 1px solid #dddddd;
+
+    background: white;
+
+    color: #151515;
+
+    border-radius: 12px;
+
+    padding: 12px 14px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.user-post-form input:focus,
+.user-post-form textarea:focus,
+.user-post-form select:focus {
+
+    border-color: #151515;
+
+    box-shadow:
+        0 0 0 3px rgba(21, 21, 21, 0.06);
+}
+
+
+.user-post-form textarea {
+
+    min-height: 150px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+
+.user-post-form-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+#userPostCharacterCount {
+
+    color: #999999;
+
+    font-size: 11px;
+}
+
+
+.user-post-form-bottom > div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.cancel-post-button,
+.publish-post-button {
+
+    border: none;
+
+    border-radius: 100px;
+
+    padding: 10px 17px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.cancel-post-button {
+
+    background: #eeeeee;
+
+    color: #555555;
+}
+
+
+.cancel-post-button:hover {
+
+    background: #e5e5e5;
+
+    transform: translateY(-1px);
+}
+
+
+.publish-post-button {
+
+    background: #151515;
+
+    color: white;
+}
+
+
+.publish-post-button:hover {
+
+    background: #303030;
+
+    transform: translateY(-1px);
+}
+
+
+.publish-post-button:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+.user-post-message {
+
+    min-height: 17px;
+
+    margin: 0 !important;
+
+    font-size: 12px;
+
+    color: #777777;
+}
+
+
+@media (max-width: 600px) {
+
+    .user-post-form-bottom {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .user-post-form-bottom > div {
+
+        width: 100%;
+    }
+
+    .cancel-post-button,
+    .publish-post-button {
+
+        flex: 1;
+    }
+}
+
+
+        /* =========================================================
+           TRANSLATION MENU
+        ========================================================= */
+
+        .translation-area {
+            margin-top: 22px;
+
+            padding-top: 17px;
+
+            border-top: 1px solid #eeeeee;
+        }
+
+        .translation-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+        .translation-controls label {
+            color: #999999;
+
+            font-size: 11px;
+        }
+
+        .translation-controls select {
+            border: 1px solid #dddddd;
+
+            border-radius: 8px;
+
+            padding: 6px 9px;
+
+            background: white;
+
+            font-size: 12px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           REACTIONS
+        ========================================================= */
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 22px;
+        }
+
+        .reaction-button {
+            border: 1px solid #eeeeee;
+
+            background: #fafafa;
+
+            border-radius: 100px;
+
+            padding: 8px 13px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .reaction-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+        }
+
+        .reaction-button.reacted {
+            background: #151515;
+            color: white;
+            border-color: #151515;
+        }
+
+
+        /* =========================================================
+           COMMENTS / COMMUNITY POST BUTTON
+        ========================================================= */
+
+        .comment-button {
+            border: none;
+
+            background: transparent;
+
+            color: #888888;
+
+            padding: 8px 10px;
+
+            font-size: 12px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           USER POST AREA
+        ========================================================= */
+
+        .create-post {
+            background: #fafafa;
+
+            border: 1px dashed #dddddd;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 30px;
+        }
+
+        .create-post h2 {
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+
+        .create-post p {
+            color: #888888;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .create-post-button {
+            border: none;
+
+            background: #151515;
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 100px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           STAFF PANEL
+        ========================================================= */
+
+        .staff-panel {
+            display: none;
+
+            background: #151515;
+            color: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 30px;
+        }
+
+        .staff-panel.visible {
+            display: block;
+        }
+
+        .staff-panel h2 {
+            margin-bottom: 7px;
+        }
+
+        .staff-panel p {
+            color: #aaaaaa;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .staff-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .staff-form input,
+        .staff-form textarea,
+        .staff-form select {
+            width: 100%;
+
+            padding: 11px 13px;
+
+            border: 1px solid #333333;
+
+            border-radius: 9px;
+
+            background: #222222;
+
+            color: white;
+
+            font-family: inherit;
+        }
+
+        .staff-form textarea {
+            min-height: 140px;
+
+            resize: vertical;
+        }
+
+        .staff-form button {
+            width: fit-content;
+
+            border: none;
+
+            background: white;
+            color: #151515;
+
+            padding: 10px 18px;
+
+            border-radius: 100px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================================
+           STAFF LOGIN
+        ========================================================= */
+
+        .staff-login {
+            display: flex;
+            gap: 8px;
+
+            margin-top: 12px;
+        }
+
+        .staff-login input {
+            flex: 1;
+
+            padding: 10px 12px;
+
+            border-radius: 8px;
+
+            border: 1px solid #dddddd;
+        }
+
+        .staff-login button {
+            border: none;
+
+            background: #151515;
+            color: white;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 700px) {
+
+            .kiki-header {
+                padding: 22px 20px 16px;
+            }
+
+            .kiki-subtitle {
+                display: none;
+            }
+
+            .community-navigation {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .kiki-main {
+                padding: 25px 15px 50px;
+            }
+
+            .post {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .post-title {
+                font-size: 20px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body class="home-page">
+
+
+    <!-- =========================================================
+         KIKI INTERNAL HEADER
+    ========================================================== -->
+
+    <header class="kiki-header">
+
+        <div class="kiki-brand">
+
+            <div class="kiki-logo">
+                Home
+            </div>
+
+            <div class="kiki-subtitle">
+                The Place to feel at Home
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         ARTIST / COMMUNITY NAVIGATION
+    ========================================================== -->
+
+    <nav class="community-navigation">
+
+        <button class="community-button active"
+                onclick="filterPosts('all', this)">
+            All
+        </button>
+
+        <button class="community-button"
+                onclick="filterPosts('Harmonia', this)">
+            Harmonia
+        </button>
+
+        <button class="community-button"
+                onclick="filterPosts('Osako’s Diary', this)">
+            Osako’s Diary
+        </button>
+
+        <button class="community-button"
+                onclick="filterPosts('Ai Hina Sato', this)">
+            佐藤愛ひな
+        </button>
+
+        <button class="community-button"
+                onclick="filterPosts('YENNIE', this)">
+            YENNIE
+        </button>
+
+        <button class="community-button"
+                onclick="filterPosts('SUJI', this)">
+            SUJI
+        </button>
+
+        <button class="community-button"
+                onclick="filterPosts('HYEJIN', this)">
+            HYEJIN
+        </button>
+
+        <button class="community-button"
+                onclick="filterPosts('SEIUN', this)">
+            SEIUN
+        </button>
+
+    </nav>
+
+
+    <!-- =========================================================
+         MAIN KIKI CONTENT
+    ========================================================== -->
+
+    <main class="kiki-main">
+
+<!-- =====================================================
+     SEARCH
+====================================================== -->
+
+<section class="kiki-search">
+
+    <div class="search-box">
+
+        <span class="search-icon">
+            ⌕
+        </span>
+
+        <input
+            type="search"
+            id="kikiSearchInput"
+            class="search-input"
+            placeholder="Search KiKi..."
+            autocomplete="off"
+        >
+
+    </div>
+
+    <div
+        id="kikiSearchResults"
+        class="search-results">
+    </div>
+
+</section>
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome-section">
+
+            <h1>Welcome to KiKi</h1>
+
+            <p>
+                A place for fans and communities of Hrmnx Entertainment
+                artists to connect, share and keep up with the latest posts.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             USER POST CREATION
+        ====================================================== -->
+
+<section class="create-post" id="userPostCreator">
+
+    <div class="user-post-heading">
+        <h2>Share something with the community</h2>
+
+        <p id="userPostSubtitle">
+            Sign in with your YumeworldYami account to make your own post.
+        </p>
+    </div>
+
+
+    <!-- Logged-out state -->
+
+    <div id="userPostLoggedOut">
+
+        <button
+            class="create-post-button"
+            onclick="openUserPost()">
+
+            Create a post
+
+        </button>
+
+    </div>
+
+
+    <!-- Logged-in state -->
+
+    <div
+        id="userPostComposer"
+        style="display: none;">
+
+        <div class="composer-user">
+
+            <img
+                id="composerAvatar"
+                src=""
+                alt="Your profile picture"
+                class="composer-avatar">
+
+            <div class="composer-user-info">
+
+                <strong id="composerDisplayName">
+                    KiKi user
+                </strong>
+
+                <span id="composerUsername">
+                    @username
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <form
+            id="userPostForm"
+            class="user-post-form">
+
+
+            <select
+                id="userPostArtist"
+                required>
+
+                <option value="">
+                    Choose an artist / community
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="userPostTitle"
+                placeholder="Post title"
+                maxlength="150"
+                required>
+
+
+            <textarea
+                id="userPostContent"
+                placeholder="What's on your mind?"
+                maxlength="5000"
+                required></textarea>
+
+
+            <input
+                type="url"
+                id="userPostImage"
+                placeholder="Image URL (optional)">
+
+
+            <div class="user-post-form-bottom">
+
+                <span id="userPostCharacterCount">
+                    0 / 5000
+                </span>
+
+                <div>
+
+                    <button
+                        type="button"
+                        id="cancelUserPost"
+                        class="cancel-post-button">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="publish-post-button">
+
+                        Post
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <p
+                id="userPostMessage"
+                class="user-post-message">
+            </p>
+
+        </form>
+
+    </div>
+
+</section>
+
+        <!-- =====================================================
+             STAFF LOGIN
+        ====================================================== -->
+
+        <section class="create-post">
+
+            <h2>KiKifficial staff</h2>
+
+            <p>
+                Staff members can access the KiKi post manager here.
+            </p>
+
+            <div class="staff-login">
+
+                <input
+                    type="password"
+                    id="staffPassword"
+                    placeholder="Staff password">
+
+                <button onclick="loginStaff()">
+                    Staff login
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             STAFF POST PANEL
+        ====================================================== -->
+
+        <section class="staff-panel" id="staffPanel">
+
+            <h2>KiKifficial Post Manager</h2>
+
+            <p>
+                Create an official KiKi post.
+            </p>
+
+            <form
+                class="staff-form"
+                onsubmit="createStaffPost(event)">
+
+                <input
+                    type="text"
+                    id="staffArtist"
+                    placeholder="Artist / community"
+                    required>
+
+                <input
+                    type="text"
+                    id="staffTitle"
+                    placeholder="Post title"
+                    required>
+
+                <textarea
+                    id="staffContent"
+                    placeholder="Write the post..."
+                    required></textarea>
+
+                <select id="staffTranslation">
+
+                    <option value="manual">
+                        Manually translated by staff
+                    </option>
+
+                    <option value="automatic">
+                        Automatically translated
+                    </option>
+
+                </select>
+
+                <button type="submit">
+                    Publish KiKifficial post
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- =====================================================
+             FEED
+        ====================================================== -->
+
+        <section id="postFeed">
+
+	    <div class="feed-loading">
+	        Loading KiKi...
+	    </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+<script>
+
+let searchTimeout = null;
+
+
+function escapeSearchHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+function escapeSearchAttribute(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
+async function searchKiKi(query) {
+
+    const results =
+        document.getElementById(
+            "kikiSearchResults"
+        );
+
+    if (!results) {
+        return;
+    }
+
+
+    query =
+        query.trim();
+
+const cleanQuery =
+    query.startsWith("@")
+        ? query.substring(1)
+        : query;
+
+
+    /* =========================================
+       EMPTY SEARCH
+    ========================================== */
+
+    if (!query) {
+
+        results.innerHTML = "";
+
+        results.classList.remove(
+            "visible"
+        );
+
+        return;
+
+    }
+
+
+    results.classList.add(
+        "visible"
+    );
+
+
+    results.innerHTML = `
+
+        <div class="search-loading">
+            Searching KiKi...
+        </div>
+
+    `;
+
+
+const searchTerm = `%${cleanQuery}%`;
+
+
+    try {
+
+/* =====================================
+   PROFILES
+===================================== */
+
+const {
+    data: profiles,
+    error: profilesError
+} = await supabaseClient
+    .from("profiles")
+    .select(`
+        id,
+        username,
+        display_name,
+        avatar_url,
+        profile_type,
+        artist_id
+    `)
+    .or(
+        `username.ilike.${searchTerm},display_name.ilike.${searchTerm}`
+    )
+    .limit(10);
+
+if (profilesError) {
+
+    console.error(
+        "Profile search error:",
+        profilesError
+    );
+
+}
+
+
+/* =====================================
+   ARTISTS
+===================================== */
+
+const {
+    data: artists,
+    error: artistsError
+} = await supabaseClient
+    .from("artists")
+    .select(`
+        id,
+        name,
+        slug,
+        avatar_url
+    `)
+    .ilike("name", searchTerm)
+    .limit(5);
+
+if (artistsError) {
+    console.error(
+        "Artist search error:",
+        artistsError
+    );
+}
+
+/* =====================================
+   FIND ARTIST PROFILES
+===================================== */
+
+const artistIds = (artists || []).map(
+    artist => artist.id
+);
+
+let artistProfiles = [];
+
+if (artistIds.length) {
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .select(`
+            id,
+            username,
+            display_name,
+            avatar_url,
+            profile_type,
+            artist_id
+        `)
+        .eq("profile_type", "artist")
+        .in("artist_id", artistIds);
+
+    if (error) {
+
+        console.error(
+            "Artist profile search error:",
+            error
+        );
+
+    } else {
+
+        artistProfiles = data || [];
+
+    }
+
+}
+
+/* =====================================
+   MATCH ARTIST TO ITS REAL PROFILE
+===================================== */
+
+const artistProfileIds = new Set();
+
+(artists || []).forEach(artist => {
+
+    const matchingProfile =
+        (profiles || []).find(
+            profile =>
+                profile.artist_id === artist.id &&
+                profile.profile_type === "artist"
+        );
+
+    if (matchingProfile) {
+
+        artistProfileIds.add(
+            matchingProfile.id
+        );
+
+    }
+
+});
+
+
+        /* =====================================
+           RELEASES
+        ====================================== */
+
+        const {
+            data: releases,
+            error: releasesError
+        } = await supabaseClient
+
+            .from("releases")
+
+            .select(`
+                id,
+                artist_id,
+                title,
+                type,
+                cover_url,
+                release_date
+            `)
+
+            .ilike(
+                "title",
+                searchTerm
+            )
+
+            .limit(5);
+
+
+        if (releasesError) {
+
+            console.error(
+                "Release search error:",
+                releasesError
+            );
+
+        }
+
+
+        /* =====================================
+           POSTS
+        ====================================== */
+
+        const {
+            data: posts,
+            error: postsError
+        } = await supabaseClient
+
+            .from("posts")
+
+            .select(`
+                id,
+                title,
+                content,
+                created_at
+            `)
+
+            .or(
+                `title.ilike.${searchTerm},content.ilike.${searchTerm}`
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+
+            .limit(5);
+
+
+        if (postsError) {
+
+            console.error(
+                "Post search error:",
+                postsError
+            );
+
+        }
+
+
+/* =====================================
+   REMOVE ARTISTS THAT ALREADY HAVE
+   A KIKI PROFILE
+===================================== */
+
+const profileArtistIds = new Set(
+    (profiles || [])
+        .map(profile => profile.artist_id)
+        .filter(Boolean)
+);
+
+const uniqueArtists = (artists || []).filter(
+    artist => !profileArtistIds.has(artist.id)
+);
+
+
+/* =====================================
+   RENDER RESULTS
+===================================== */
+
+renderSearchResults({
+    profiles: profiles || [],
+    artists: uniqueArtists,
+    releases: releases || [],
+    posts: posts || []
+});
+
+
+    } catch (error) {
+
+        console.error(
+            "KiKi search failed:",
+            error
+        );
+
+
+        results.innerHTML = `
+
+            <div class="search-empty">
+                Unable to search KiKi.
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+function renderSearchResults(data) {
+
+    const results =
+        document.getElementById(
+            "kikiSearchResults"
+        );
+
+
+    let html = "";
+
+
+    /* =========================================
+       PROFILES
+    ========================================== */
+
+    if (data.profiles.length) {
+
+        data.profiles.forEach(
+            profile => {
+
+                html += `
+
+                    <div
+                        class="search-result"
+                        onclick="openSearchProfile(
+                            '${escapeSearchAttribute(profile.username)}'
+                        )">
+
+                        <img
+                            class="search-result-image"
+                            src="${escapeSearchAttribute(
+                                profile.avatar_url ||
+                                "images/default-avatar.png"
+                            )}"
+                            alt=""
+                        >
+
+                        <div class="search-result-info">
+
+                            <div class="search-result-title">
+
+                                ${escapeSearchHTML(
+                                    profile.display_name ||
+                                    profile.username
+                                )}
+
+                            </div>
+
+                            <div class="search-result-meta">
+
+                                @${escapeSearchHTML(
+                                    profile.username
+                                )}
+
+                            </div>
+
+                        </div>
+
+                        <span class="search-result-type">
+                            Profile
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+/* =========================================
+   ARTISTS
+========================================= */
+
+if (data.artists.length) {
+
+    data.artists.forEach(artist => {
+
+        /*
+         * Check whether this artist already has
+         * a KiKi profile.
+         */
+
+        const artistProfile =
+            data.profiles.find(
+                profile =>
+                    profile.artist_id === artist.id &&
+                    profile.profile_type === "artist"
+            );
+
+
+        /*
+         * If the artist already has a profile,
+         * don't show a duplicate artist result.
+         */
+
+        if (artistProfile) {
+            return;
+        }
+
+
+        /*
+         * Otherwise show the standalone artist.
+         */
+
+        html += `
+
+            <div
+                class="search-result"
+                onclick="openSearchArtist(
+                    '${escapeSearchAttribute(artist.slug)}'
+                )"
+            >
+
+                <img
+                    src="${escapeSearchAttribute(
+                        artist.avatar_url || ""
+                    )}"
+                    alt=""
+                >
+
+                <div>
+
+                    <strong>
+                        ${escapeSearchHTML(artist.name)}
+                    </strong>
+
+                    <span>
+                        Artist
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+    /* =========================================
+       MUSIC
+    ========================================== */
+
+    if (data.releases.length) {
+
+        data.releases.forEach(
+            release => {
+
+                html += `
+
+                    <div
+                        class="search-result"
+                        onclick="openSearchRelease(
+                            ${release.id}
+                        )">
+
+                        <img
+                            class="search-result-image square"
+                            src="${escapeSearchAttribute(
+                                release.cover_url || ""
+                            )}"
+                            alt=""
+                        >
+
+                        <div class="search-result-info">
+
+                            <div class="search-result-title">
+
+                                ${escapeSearchHTML(
+                                    release.title
+                                )}
+
+                            </div>
+
+                            <div class="search-result-meta">
+
+                                ${escapeSearchHTML(
+                                    release.type ||
+                                    "Release"
+                                )}
+
+                            </div>
+
+                        </div>
+
+                        <span class="search-result-type">
+                            Music
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    /* =========================================
+       POSTS
+    ========================================== */
+
+    if (data.posts.length) {
+
+        data.posts.forEach(
+            post => {
+
+                html += `
+
+                    <div
+                        class="search-result"
+                        onclick="openSearchPost(
+                            ${post.id}
+                        )">
+
+                        <div class="search-result-image">
+
+                            📝
+
+                        </div>
+
+                        <div class="search-result-info">
+
+                            <div class="search-result-title">
+
+                                ${escapeSearchHTML(
+                                    post.title ||
+                                    "Untitled post"
+                                )}
+
+                            </div>
+
+                            <div class="search-result-meta">
+
+                                ${escapeSearchHTML(
+                                    post.content
+                                        ? post.content.substring(
+                                            0,
+                                            80
+                                        )
+                                        : ""
+                                )}
+
+                            </div>
+
+                        </div>
+
+                        <span class="search-result-type">
+                            Post
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    if (!html) {
+
+        html = `
+
+            <div class="search-empty">
+
+                No results found for
+                <strong>
+                    ${escapeSearchHTML(
+                        document.getElementById(
+                            "kikiSearchInput"
+                        ).value
+                    )}
+                </strong>
+
+            </div>
+
+        `;
+
+    }
+
+
+    results.innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   SEARCH NAVIGATION
+====================================================== */
+
+function openSearchProfile(username) {
+
+    window.location.href =
+        `profile.html?username=${encodeURIComponent(username)}`;
+
+}
+
+
+function openSearchArtist(slug) {
+
+    /*
+     * Change this later if you have
+     * a dedicated artist page.
+     */
+
+    window.location.href =
+        `profile.html?username=${encodeURIComponent(slug)}`;
+
+}
+
+
+function openSearchRelease(id) {
+
+    /*
+     * Change this later if you create
+     * a dedicated release page.
+     */
+
+    window.location.href =
+        `profile.html?release=${id}`;
+
+}
+
+
+function openSearchPost(id) {
+
+    window.location.href =
+        `post.html?id=${id}`;
+
+}
+
+
+/* =====================================================
+   SEARCH INPUT
+====================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const input =
+            document.getElementById(
+                "kikiSearchInput"
+            );
+
+
+        if (!input) {
+            return;
+        }
+
+
+        input.addEventListener(
+            "input",
+            () => {
+
+                clearTimeout(
+                    searchTimeout
+                );
+
+
+                searchTimeout =
+                    setTimeout(
+                        () => {
+
+                            searchKiKi(
+                                input.value
+                            );
+
+                        },
+                        300
+                    );
+
+            }
+        );
+
+
+        input.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    input.value = "";
+
+                    searchKiKi("");
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+    <script>
+
+        /* =====================================================
+           FILTER ARTIST POSTS
+        ====================================================== */
+
+        function filterPosts(artist, button) {
+
+            document
+                .querySelectorAll(".community-button")
+                .forEach(btn => {
+                    btn.classList.remove("active");
+                });
+
+            button.classList.add("active");
+
+
+            document
+                .querySelectorAll(".post")
+                .forEach(post => {
+
+                    if (
+                        artist === "all" ||
+                        post.dataset.artist === artist
+                    ) {
+
+                        post.style.display = "block";
+
+                    } else {
+
+                        post.style.display = "none";
+
+                    }
+
+                });
+
+        }
+
+
+        /* =====================================================
+           REACTIONS
+        ====================================================== */
+
+        function react(button) {
+
+            button.classList.toggle("reacted");
+
+            const number =
+                button.querySelector("span");
+
+            let count =
+                parseInt(number.textContent);
+
+            if (button.classList.contains("reacted")) {
+
+                count++;
+
+            } else {
+
+                count--;
+
+            }
+
+            number.textContent = count;
+
+        }
+
+
+        /* =====================================================
+           TRANSLATION
+        ====================================================== */
+
+        function translatePost(select) {
+
+            const post =
+                select.closest(".post");
+
+            const content =
+                post.querySelector(".post-content");
+
+            const language =
+                select.value;
+
+            const translatedText =
+                content.dataset[language];
+
+            if (translatedText) {
+
+                content.textContent =
+                    translatedText;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           USER POST
+        ====================================================== */
+
+async function openUserPost() {
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user) {
+
+        window.location.href =
+            "logsignin.html";
+
+        return;
+    }
+
+
+    document.getElementById(
+        "userPostLoggedOut"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "userPostComposer"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "userPostSubtitle"
+    ).textContent =
+        "Share something with the KiKi community.";
+
+}
+
+async function initializeUserPostCreator() {
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user) {
+        return;
+    }
+
+
+    const {
+        data: profile,
+        error: profileError
+    } = await supabaseClient
+        .from("profiles")
+        .select(`
+            display_name,
+            username,
+            avatar_url
+        `)
+        .eq("id", user.id)
+        .single();
+
+
+    if (profileError) {
+
+        console.error(
+            "Could not load user profile:",
+            profileError
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "composerDisplayName"
+    ).textContent =
+        profile.display_name ||
+        "KiKi user";
+
+
+    document.getElementById(
+        "composerUsername"
+    ).textContent =
+        profile.username
+            ? "@" + profile.username
+            : user.email;
+
+
+    document.getElementById(
+        "composerAvatar"
+    ).src =
+        profile.avatar_url ||
+        "images/default-avatar.png";
+
+
+    await loadPostArtists();
+}
+
+async function loadPostArtists() {
+
+    const artistSelect =
+        document.getElementById(
+            "userPostArtist"
+        );
+
+
+    const {
+        data: artists,
+        error
+    } = await supabaseClient
+        .from("artists")
+        .select(`
+            id,
+            name,
+            slug
+        `)
+        .order("name");
+
+
+    if (error) {
+
+        console.error(
+            "Could not load artists:",
+            error
+        );
+
+        return;
+    }
+
+
+    artists.forEach(artist => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            artist.id;
+
+        option.textContent =
+            artist.name;
+
+        artistSelect.appendChild(
+            option
+        );
+
+    });
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initializeUserPostCreator();
+
+
+        const content =
+            document.getElementById(
+                "userPostContent"
+            );
+
+
+        const counter =
+            document.getElementById(
+                "userPostCharacterCount"
+            );
+
+
+        if (content && counter) {
+
+            content.addEventListener(
+                "input",
+                () => {
+
+                    counter.textContent =
+                        `${content.value.length} / 5000`;
+
+                }
+            );
+
+        }
+
+
+        const cancelButton =
+            document.getElementById(
+                "cancelUserPost"
+            );
+
+
+        if (cancelButton) {
+
+            cancelButton.addEventListener(
+                "click",
+                () => {
+
+                    document.getElementById(
+                        "userPostComposer"
+                    ).style.display = "none";
+
+
+                    document.getElementById(
+                        "userPostForm"
+                    ).reset();
+
+
+                    counter.textContent =
+                        "0 / 5000";
+
+                }
+            );
+
+        }
+
+
+        const form =
+            document.getElementById(
+                "userPostForm"
+            );
+
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                createUserPost
+            );
+
+        }
+
+    }
+);
+
+async function createUserPost(event) {
+
+    event.preventDefault();
+
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user) {
+
+        window.location.href =
+            "logsignin.html";
+
+        return;
+    }
+
+
+    const artistId =
+        document.getElementById(
+            "userPostArtist"
+        ).value;
+
+
+    const title =
+        document.getElementById(
+            "userPostTitle"
+        ).value.trim();
+
+
+    const content =
+        document.getElementById(
+            "userPostContent"
+        ).value.trim();
+
+
+    const imageUrl =
+        document.getElementById(
+            "userPostImage"
+        ).value.trim();
+
+
+    const message =
+        document.getElementById(
+            "userPostMessage"
+        );
+
+
+    const publishButton =
+        document.querySelector(
+            ".publish-post-button"
+        );
+
+
+    if (!artistId ||
+        !title ||
+        !content) {
+
+        message.textContent =
+            "Please fill in all required fields.";
+
+        return;
+    }
+
+
+    publishButton.disabled =
+        true;
+
+
+    publishButton.textContent =
+        "Posting...";
+
+
+    message.textContent =
+        "";
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("posts")
+        .insert({
+
+            author_id:
+                user.id,
+
+            artist_id:
+                artistId,
+
+            title:
+                title,
+
+            content:
+                content,
+
+            image_url:
+                imageUrl || null,
+
+            is_staff_post:
+                false
+
+        });
+
+
+    if (error) {
+
+        console.error(
+            "Create post error:",
+            error
+        );
+
+
+        message.textContent =
+            "Unable to create your post.";
+
+
+        publishButton.disabled =
+            false;
+
+
+        publishButton.textContent =
+            "Post";
+
+
+        return;
+    }
+
+
+    message.textContent =
+        "Your post was published!";
+
+
+    document.getElementById(
+        "userPostForm"
+    ).reset();
+
+
+    document.getElementById(
+        "userPostCharacterCount"
+    ).textContent =
+        "0 / 5000";
+
+
+    publishButton.disabled =
+        false;
+
+
+    publishButton.textContent =
+        "Post";
+
+
+    /*
+     * Reload the feed so the new post
+     * appears immediately.
+     */
+
+    if (typeof loadKiKiFeed === "function") {
+
+        await loadKiKiFeed();
+
+    }
+
+}
+
+
+        /* =====================================================
+           STAFF LOGIN
+           
+           IMPORTANT:
+           This is only a FRONT-END DEMONSTRATION.
+           The actual password must be checked server-side.
+        ====================================================== */
+
+        function loginStaff() {
+
+            const password =
+                document.getElementById("staffPassword").value;
+
+            /*
+             * DO NOT put the real staff password here
+             * in the production version.
+             *
+             * This currently only demonstrates the interface.
+             */
+
+            if (password.length > 0) {
+
+                document
+                    .getElementById("staffPanel")
+                    .classList.add("visible");
+
+                document
+                    .getElementById("staffPassword")
+                    .value = "";
+
+            } else {
+
+                alert("Please enter the staff password.");
+
+            }
+
+        }
+
+
+        /* =====================================================
+           CREATE STAFF POST
+        ====================================================== */
+
+        function createStaffPost(event) {
+
+            event.preventDefault();
+
+
+            const artist =
+                document.getElementById("staffArtist").value;
+
+            const title =
+                document.getElementById("staffTitle").value;
+
+            const content =
+                document.getElementById("staffContent").value;
+
+            const translation =
+                document.getElementById("staffTranslation").value;
+
+
+            const translationLabel =
+                translation === "manual"
+
+                ? "manually translated by staff"
+
+                : "automatically translated (mistakes may appear)";
+
+
+            const post =
+                document.createElement("article");
+
+            post.className = "post";
+
+            post.dataset.artist = artist;
+
+
+            post.innerHTML = `
+
+                <div class="official-label">
+
+                    <img
+                        src="images/Kikifficial.gif"
+                        alt="KiKifficial">
+
+                    <span>
+                        KiKifficial
+                    </span>
+
+                </div>
+
+
+                <div class="post-header">
+
+                    <div class="artist-avatar">
+                        ${artist.substring(0, 2).toUpperCase()}
+                    </div>
+
+                    <div class="post-author">
+
+                        <strong>
+                            ${artist}
+                        </strong>
+
+                        <span class="post-date">
+                            KiKifficial · Just now
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <h2 class="post-title">
+                    ${title}
+                </h2>
+
+
+                <span class="translation-label">
+                    ${translationLabel}
+                </span>
+
+
+                <p class="post-content">
+                    ${content}
+                </p>
+
+
+                <div class="post-actions">
+
+                    <button
+                        class="reaction-button"
+                        onclick="react(this)">
+
+                        ♡ <span>0</span>
+
+                    </button>
+
+                    <button class="comment-button">
+                        Comments
+                    </button>
+
+                </div>
+
+            `;
+
+
+            document
+                .getElementById("postFeed")
+                .prepend(post);
+
+
+            document
+                .getElementById("staffArtist")
+                .value = "";
+
+            document
+                .getElementById("staffTitle")
+                .value = "";
+
+            document
+                .getElementById("staffContent")
+                .value = "";
+
+        }
+
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/feed.js"></script>
+
+</body>
+</html>

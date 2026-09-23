@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>KiKi Profile</title>
+
+
+    <!-- DM SANS -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- FONT AWESOME -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background: #111;
+
+            color: #fff;
+
+            font-family: "DM Sans", sans-serif;
+
+            min-height: 100vh;
+        }
+
+
+        /* ========================================
+           PAGE
+        ======================================== */
+
+        .profile-page {
+
+            width: 100%;
+
+            max-width: 760px;
+
+            margin: auto;
+
+            padding: 45px 20px 80px;
+        }
+
+
+        /* ========================================
+           PROFILE HEADER
+        ======================================== */
+
+        .profile-header {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            text-align: center;
+        }
+
+
+        .profile-avatar {
+
+            width: 105px;
+
+            height: 105px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            background: #222;
+
+            margin-bottom: 18px;
+
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+
+        .profile-name-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+        }
+
+
+        .profile-name {
+
+            margin: 0;
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            letter-spacing: -0.04em;
+        }
+
+
+        .staff-badge {
+
+            width: 19px;
+
+            height: 19px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            color: #111;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 10px;
+        }
+
+
+        .profile-username {
+
+            margin-top: 4px;
+
+            color: #888;
+
+            font-size: 13px;
+        }
+
+
+        .profile-type {
+
+            margin-top: 10px;
+
+            padding: 5px 10px;
+
+            border-radius: 999px;
+
+            background: #222;
+
+            color: #aaa;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.08em;
+        }
+
+
+        .profile-bio {
+
+            max-width: 550px;
+
+            margin: 16px auto 0;
+
+            color: #ccc;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            white-space: pre-wrap;
+        }
+
+
+        /* ========================================
+           RELEASE FEATURE
+        ======================================== */
+
+        .featured-release {
+
+            margin-top: 28px;
+
+            background: #fff;
+
+            color: #111;
+
+            border-radius: 22px;
+
+            padding: 15px;
+
+            text-align: left;
+
+            box-shadow:
+                0 15px 45px rgba(0,0,0,0.25);
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease;
+        }
+
+
+        .featured-release:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 20px 55px rgba(0,0,0,0.32);
+        }
+
+
+        .release-label {
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: .12em;
+
+            color: #999;
+
+            text-transform: uppercase;
+
+            margin-bottom: 12px;
+        }
+
+
+        .release-content {
+
+            display: flex;
+
+            gap: 15px;
+
+            align-items: center;
+        }
+
+
+        .release-cover {
+
+            width: 105px;
+
+            height: 105px;
+
+            object-fit: cover;
+
+            border-radius: 14px;
+
+            flex-shrink: 0;
+        }
+
+
+        .release-details {
+
+            min-width: 0;
+
+            flex: 1;
+        }
+
+
+        .release-title {
+
+            margin: 0;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            letter-spacing: -.035em;
+        }
+
+
+        .release-type {
+
+            margin-top: 3px;
+
+            color: #888;
+
+            font-size: 11px;
+        }
+
+
+        .release-date {
+
+            margin-top: 8px;
+
+            color: #777;
+
+            font-size: 10px;
+        }
+
+
+        .release-countdown {
+
+            margin-top: 10px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        .release-problem {
+
+            margin-top: 10px;
+
+            padding: 9px 11px;
+
+            border-radius: 10px;
+
+            background: #fff0f0;
+
+            color: #a33;
+
+            font-size: 10px;
+
+            line-height: 1.45;
+        }
+
+
+        /* ========================================
+           TABS
+        ======================================== */
+
+        .profile-tabs {
+
+            display: flex;
+
+            margin-top: 35px;
+
+            border-bottom: 1px solid #292929;
+        }
+
+
+        .profile-tab {
+
+            flex: 1;
+
+            border: 0;
+
+            background: none;
+
+            color: #777;
+
+            padding: 15px 10px;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            position: relative;
+
+            transition: color .2s ease;
+        }
+
+
+        .profile-tab:hover {
+
+            color: #bbb;
+        }
+
+
+        .profile-tab.active {
+
+            color: #fff;
+        }
+
+
+        .profile-tab.active::after {
+
+            content: "";
+
+            position: absolute;
+
+            bottom: -1px;
+
+            left: 20%;
+
+            right: 20%;
+
+            height: 2px;
+
+            border-radius: 99px;
+
+            background: #fff;
+        }
+
+
+        /* ========================================
+           CONTENT
+        ======================================== */
+
+        .profile-content {
+
+            padding-top: 22px;
+        }
+
+
+        .tab-content {
+
+            display: none;
+        }
+
+
+        .tab-content.active {
+
+            display: block;
+        }
+
+
+        .empty-state {
+
+            padding: 50px 20px;
+
+            text-align: center;
+
+            color: #666;
+
+            font-size: 13px;
+        }
+
+
+        /* ========================================
+           POSTS
+        ======================================== */
+
+        .post-card {
+
+            background: #191919;
+
+            border: 1px solid #242424;
+
+            border-radius: 17px;
+
+            padding: 17px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .post-text {
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ========================================
+           MUSIC
+        ======================================== */
+
+        .music-release {
+
+            background: #191919;
+
+            border: 1px solid #242424;
+
+            border-radius: 20px;
+
+            padding: 14px;
+
+            margin-bottom: 14px;
+        }
+
+
+        .music-release-top {
+
+            display: flex;
+
+            gap: 15px;
+
+            align-items: center;
+        }
+
+
+        .music-cover {
+
+            width: 100px;
+
+            height: 100px;
+
+            object-fit: cover;
+
+            border-radius: 13px;
+
+            flex-shrink: 0;
+        }
+
+
+        .music-title {
+
+            margin: 0;
+
+            font-size: 19px;
+
+            font-weight: 700;
+        }
+
+
+        .music-meta {
+
+            margin-top: 5px;
+
+            color: #888;
+
+            font-size: 11px;
+        }
+
+
+        .tracklist {
+
+            margin-top: 15px;
+
+            border-top: 1px solid #292929;
+        }
+
+
+        .track {
+
+            display: flex;
+
+            gap: 12px;
+
+            padding: 9px 2px;
+
+            border-bottom: 1px solid #242424;
+
+            font-size: 11px;
+
+            color: #ccc;
+        }
+
+
+        .track-number {
+
+            width: 20px;
+
+            color: #666;
+        }
+
+
+        .platforms {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 7px;
+
+            margin-top: 15px;
+        }
+
+
+        .platform {
+
+            text-decoration: none;
+
+            color: #fff;
+
+            background: #272727;
+
+            border-radius: 999px;
+
+            padding: 8px 11px;
+
+            font-size: 10px;
+
+            transition: background .2s ease;
+        }
+
+
+        .platform:hover {
+
+            background: #383838;
+        }
+
+
+        /* ========================================
+           MOBILE
+        ======================================== */
+
+        @media (max-width: 600px) {
+
+            .profile-page {
+
+                padding:
+                    30px
+                    15px
+                    60px;
+            }
+
+
+            .profile-avatar {
+
+                width: 90px;
+
+                height: 90px;
+            }
+
+
+            .profile-name {
+
+                font-size: 24px;
+            }
+
+
+            .featured-release {
+
+                border-radius: 19px;
+
+                padding: 12px;
+            }
+
+
+            .release-cover {
+
+                width: 85px;
+
+                height: 85px;
+            }
+
+
+            .release-title {
+
+                font-size: 17px;
+            }
+
+
+            .music-cover {
+
+                width: 80px;
+
+                height: 80px;
+            }
+
+
+            .music-title {
+
+                font-size: 16px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="profile-page">
+
+
+    <!-- ========================================
+         PROFILE
+    ======================================== -->
+
+    <header class="profile-header">
+
+        <img
+            id="profile-avatar"
+            class="profile-avatar"
+            src=""
+            alt=""
+        >
+
+
+        <div class="profile-name-row">
+
+            <h1
+                id="profile-name"
+                class="profile-name"
+            >
+                Loading...
+            </h1>
+
+
+            <span
+                id="staff-badge"
+                class="staff-badge"
+            >
+                <i class="fa-solid fa-check"></i>
+            </span>
+
+        </div>
+
+
+        <div
+            id="profile-username"
+            class="profile-username"
+        ></div>
+
+
+        <div
+            id="profile-type"
+            class="profile-type"
+        ></div>
+
+
+        <div
+            id="profile-bio"
+            class="profile-bio"
+        ></div>
+
+    </header>
+
+
+    <!-- ========================================
+         FEATURED RELEASE
+    ======================================== -->
+
+    <div
+        id="featured-release"
+        class="featured-release"
+        style="display:none;"
+    ></div>
+
+
+    <!-- ========================================
+         TABS
+    ======================================== -->
+
+    <nav
+        id="profile-tabs"
+        class="profile-tabs"
+    >
+
+        <button
+            class="profile-tab active"
+            data-tab="posts"
+        >
+            Posts
+        </button>
+
+
+        <button
+            id="music-tab-button"
+            class="profile-tab"
+            data-tab="music"
+            style="display:none;"
+        >
+            Music
+        </button>
+
+
+        <button
+            class="profile-tab"
+            data-tab="reposts"
+        >
+            Reposts
+        </button>
+
+    </nav>
+
+
+    <!-- ========================================
+         CONTENT
+    ======================================== -->
+
+    <main class="profile-content">
+
+
+        <section
+            id="posts-tab"
+            class="tab-content active"
+        >
+
+            <div
+                id="posts-content"
+                class="empty-state"
+            >
+                Loading posts...
+            </div>
+
+        </section>
+
+
+        <section
+            id="music-tab"
+            class="tab-content"
+        >
+
+            <div
+                id="music-content"
+                class="empty-state"
+            >
+                Loading music...
+            </div>
+
+        </section>
+
+
+        <section
+            id="reposts-tab"
+            class="tab-content"
+        >
+
+            <div
+                id="reposts-content"
+                class="empty-state"
+            >
+                Reposts will appear here.
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- YOUR EXISTING SUPABASE CONFIG -->
+
+<script src="js/supabase.js"></script>
+
+
+<!-- PROFILE -->
+
+<script src="profile.js"></script>
+
+
+</body>
+
+</html>
