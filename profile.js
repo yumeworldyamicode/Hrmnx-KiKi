@@ -1081,7 +1081,9 @@ async function loadIndmPublications() {
     if (!tabButton || !container || !profile) return;
 
     try {
-        // Only Nemawashi-verified artist identities receive this tab.
+        // Verified identities are the normal access path. Artist-type KiKi
+        // profiles are also eligible so their own public DEMs are not hidden
+        // just because a separate verification row has not been linked yet.
         const { data: verified, error: verifyError } = await supabaseClient
             .from("in_music_verified_artists")
             .select("artist_name")
@@ -1090,27 +1092,35 @@ async function loadIndmPublications() {
             .maybeSingle();
 
         if (verifyError) throw verifyError;
-        if (!verified) return;
 
-        tabButton.style.display = "block";
+        const isArtistProfile = profile.profile_type === "artist";
+        if (!verified && !isArtistProfile) return;
+
+        tabButton.style.display = "inline-flex";
         container.innerHTML = '<div class="empty-state">Loading INDM publications...</div>';
 
-        // Include publications owned by this account and releases credited to the verified artist name.
-        const results = await Promise.all([
+        const artistName = verified?.artist_name || artist?.name || "";
+        const requests = [
             supabaseClient.from("indesign_dems")
                 .select("slug,title,artist,cover_path,created_at")
                 .eq("owner_id", profile.id)
                 .eq("visibility", "public")
                 .order("created_at", { ascending: false })
-                .limit(60),
-            supabaseClient.from("indesign_dems")
-                .select("slug,title,artist,cover_path,created_at")
-                .eq("artist", verified.artist_name)
-                .eq("visibility", "public")
-                .order("created_at", { ascending: false })
                 .limit(60)
-        ]);
+        ];
 
+        if (artistName) {
+            requests.push(
+                supabaseClient.from("indesign_dems")
+                    .select("slug,title,artist,cover_path,created_at")
+                    .eq("artist", artistName)
+                    .eq("visibility", "public")
+                    .order("created_at", { ascending: false })
+                    .limit(60)
+            );
+        }
+
+        const results = await Promise.all(requests);
         for (const result of results) {
             if (result.error) throw result.error;
         }
@@ -1149,7 +1159,7 @@ async function loadIndmPublications() {
                     : `<div class="indm-cover-fallback"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>`}
                 <div class="indm-publication-info">
                     <h3>${escapeHTML(item.title)}</h3>
-                    <div class="indm-publication-meta">${escapeHTML(item.artist || verified.artist_name)} · ${formatDate(new Date(item.created_at))}</div>
+                    <div class="indm-publication-meta">${escapeHTML(item.artist || artistName || "Artist")} · ${formatDate(new Date(item.created_at))}</div>
                     <div class="indm-actions">
                         <a class="indm-action" href="${postUrl}" target="_blank" rel="noopener noreferrer">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg>
@@ -1166,11 +1176,12 @@ async function loadIndmPublications() {
         });
     } catch (error) {
         console.error("Could not load INDM publications:", error);
-        tabButton.style.display = "block";
+        // Keep the tab discoverable when the profile is eligible, and show
+        // a useful fallback instead of silently hiding the feature.
+        if (profile.profile_type === "artist") tabButton.style.display = "inline-flex";
         container.innerHTML = '<div class="empty-state">INDM publications are temporarily unavailable.</div>';
     }
 }
-
 
 /* =========================================
    POSTS
