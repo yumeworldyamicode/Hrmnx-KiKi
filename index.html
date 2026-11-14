@@ -32,7 +32,9 @@ content="Hrmnx Entertainment,Harmonia Chiyo Tanaka,HOSHIZORA CO,ShiKei SU,Harmon
 <img src="images/Logo2.png" style="width: 80px;">
 </div>
 
-<nav>
+<button class="mobile-nav-toggle" id="mobile-nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="kiki-main-nav"><span></span><span></span><span></span></button>
+
+<nav id="kiki-main-nav">
 
 <a href="home.html" data-kiki-page="home.html">Home</a>
 
@@ -147,6 +149,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     window.loadKiKiPage = loadKiKiPage;
+
+    const navToggle = document.getElementById("mobile-nav-toggle");
+    const mainNav = document.getElementById("kiki-main-nav");
+    if (navToggle && mainNav) {
+        navToggle.addEventListener("click", () => {
+            const isOpen = mainNav.classList.toggle("mobile-open");
+            navToggle.classList.toggle("is-open", isOpen);
+            navToggle.setAttribute("aria-expanded", String(isOpen));
+            navToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+        });
+        mainNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+            mainNav.classList.remove("mobile-open");
+            navToggle.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+            navToggle.setAttribute("aria-label", "Open navigation");
+        }));
+    }
 
 });
 </script>
