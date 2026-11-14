@@ -801,6 +801,15 @@ function openPostComments(
    ESCAPE HTML
 ========================================= */
 
+function normalizePostText(value) {
+    return String(value ?? "")
+        .replace(/\r\n?/g, "\n")
+        .split("\n")
+        .map(line => line.replace(/^[\\t ]+/, "").replace(/[\\t ]+$/, ""))
+        .join("\n")
+        .trim();
+}
+
 function escapeHTML(value) {
 
     const div =
