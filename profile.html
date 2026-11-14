@@ -674,21 +674,38 @@
 
 
         /* INDM / indesign publications */
-        .indm-tab-icon{width:14px;height:14px;vertical-align:-3px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;margin-right:5px}
         .indm-intro{margin:0 0 18px;color:#888;font-size:11px;line-height:1.6}
-        .indm-publication{display:flex;gap:14px;align-items:center;background:#191919;border:1px solid #292929;border-radius:16px;padding:13px;margin-bottom:11px}
-        .indm-cover{width:84px;height:84px;flex:none;object-fit:cover;border-radius:10px;background:#242424}
-        .indm-cover-fallback{width:84px;height:84px;flex:none;display:grid;place-items:center;background:#242424;color:#aaa;border-radius:10px}
+        .profile-tab[data-tab="indm"]{justify-content:center;text-align:center}
+        .indm-publication{background:#191919;border:1px solid #292929;border-radius:17px;padding:13px;margin-bottom:14px;overflow:hidden}
+        .indm-publication-top{display:flex;gap:14px;align-items:center}
+        .indm-cover-button{position:relative;width:112px;height:112px;flex:none;padding:0;border:0;border-radius:12px;overflow:hidden;background:#242424;cursor:pointer}
+        .indm-cover-button:disabled{cursor:default}
+        .indm-cover{display:block;width:100%;height:100%;object-fit:cover}
+        .indm-cover-placeholder{width:100%;height:100%;display:grid;place-items:center;color:#aaa}
+        .indm-cover-placeholder svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+        .indm-cover-play{position:absolute;inset:0;display:grid;place-items:center;background:#0005;color:#fff;opacity:0;transition:opacity .2s ease}
+        .indm-cover-play svg{width:30px;height:30px;fill:currentColor;stroke:none;filter:drop-shadow(0 1px 3px #0008)}
+        .indm-cover-button:hover .indm-cover-play,.indm-publication.is-playing .indm-cover-play{opacity:1}
+        .indm-publication.is-playing .indm-cover-play svg{display:none}
+        .indm-publication.is-playing .indm-cover-play:after{content:"Ⅱ";font-size:23px;font-weight:700}
         .indm-publication-info{min-width:0;flex:1}
-        .indm-publication-info h3{margin:0 0 5px;color:#fff;font-size:15px}
+        .indm-publication-info h3{margin:0 0 5px;color:#fff;font-size:16px;line-height:1.3}
         .indm-publication-meta{font-size:10px;color:#888}
-        .indm-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
-        .indm-action{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#292929;color:#fff;border:1px solid #383838;border-radius:999px;padding:7px 10px;font-size:9px;font-weight:700}
-        .indm-action:hover{background:#383838}
-        .indm-action svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-        .indm-label{display:flex;align-items:center;gap:7px;color:#aaa;font-size:9px;font-weight:700;letter-spacing:.12em;margin-bottom:15px}
-        .indm-label svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-        @media(max-width:600px){.indm-publication{align-items:flex-start}.indm-cover,.indm-cover-fallback{width:68px;height:68px}.indm-actions{gap:5px}.indm-action{padding:7px 8px}}
+        .indm-play-status{margin-top:10px;color:#aaa;font-size:10px}
+        .indm-audio-progress{height:2px;margin-top:13px;background:#333;overflow:hidden}
+        .indm-audio-progress span{display:block;width:0;height:100%;background:#eee;transition:width .12s linear}
+        .indm-lyrics-panel{min-height:88px;margin-top:13px;padding:12px 13px;background:#202020;border-radius:12px;overflow:hidden}
+        .indm-lyrics-heading{margin-bottom:9px;color:#777;font-size:8px;font-weight:700;letter-spacing:.15em}
+        .indm-lyrics-current{min-height:42px;overflow:hidden}
+        .indm-lyrics-placeholder{color:#777;font-size:11px;line-height:1.5}
+        .indm-lyric-enter{animation:indmLyricEnter .42s cubic-bezier(.2,.75,.25,1) both}
+        @keyframes indmLyricEnter{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+        .indm-lyric-section{display:block;margin-bottom:5px;color:#777;font-size:8px;font-weight:700;letter-spacing:.12em}
+        .indm-lyric-original{color:#fff;font-size:14px;font-weight:600;line-height:1.5;white-space:pre-wrap}
+        .indm-lyric-translation{margin-top:4px;color:#999;font-size:10px;line-height:1.5;white-space:pre-wrap}
+        .indm-publication-link{display:inline-block;margin-top:11px;color:#aaa;font-size:9px;text-decoration:none}
+        .indm-publication-link:hover{color:#fff}
+        @media(max-width:600px){.indm-cover-button{width:88px;height:88px}.indm-publication-top{gap:11px}.indm-publication-info h3{font-size:14px}.indm-lyrics-panel{min-height:82px;padding:11px}}
 
     </style>
 
@@ -799,7 +816,6 @@
             data-tab="indm"
             style="display:none;"
         >
-            <svg class="indm-tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
             INDM
         </button>
 
@@ -887,6 +903,7 @@
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
 
 <!-- YOUR EXISTING SUPABASE CONFIG -->
@@ -896,7 +913,7 @@
 
 <!-- PROFILE -->
 
-<script src="profile.js?v=3"></script>
+<script src="profile.js?v=4"></script>
 
 
 </body>
