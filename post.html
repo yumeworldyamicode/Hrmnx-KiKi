@@ -309,7 +309,9 @@
         }
 
 
-        .post-action:hover {
+        .post-action-icon {width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:5px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.post-action.liked .like-icon {fill:currentColor;}
+.post-action:hover {
 
             background: #f2f2f2;
 
@@ -979,7 +981,7 @@ function goBackToKiKi() {
                         id="likeButton"
                         class="post-action">
 
-                        ♡ Like
+                        <svg class="post-action-icon like-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 8.8c0 5.1-8.4 10.1-8.4 10.1S3.6 8.8 3.6 8.8a4.4 4.4 0 0 1 8.4-1.7 4.4 4.4 0 0 1 8.4 1.7Z"/></svg> Like
                         <span id="likeCount">
                             0
                         </span>
@@ -997,7 +999,7 @@ function goBackToKiKi() {
                             .focus()
                         ">
 
-                        💬 Comment
+                        <svg class="post-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.2-3.1A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8.5 11.5h7M8.5 14.5h4.5"/></svg> Comment
 
                     </button>
 
@@ -1006,7 +1008,7 @@ function goBackToKiKi() {
                         id="shareButton"
                         class="post-action">
 
-                        ↗ Share
+                        <svg class="post-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg> Share
 
                     </button>
 
@@ -1915,8 +1917,8 @@ document.getElementById(
 
             document.getElementById(
                 "shareButton"
-            ).textContent =
-                "✓ Copied!";
+            ).innerHTML =
+                '<svg class="post-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.2L19.5 6.8"/></svg> Copied!';
 
 
             setTimeout(
@@ -1924,8 +1926,8 @@ document.getElementById(
 
                     document.getElementById(
                         "shareButton"
-                    ).textContent =
-                        "↗ Share";
+                    ).innerHTML =
+                        '<svg class="post-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg> Share';
 
                 },
                 1800
