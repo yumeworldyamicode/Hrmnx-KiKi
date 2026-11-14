@@ -1278,17 +1278,23 @@ async function loadIndmPublications() {
                     renderLyric(active);
                     if (audio.duration) progress.style.width = (current / audio.duration * 100) + "%";
                 });
+                const coverPlayIcon = coverButton.querySelector(".indm-cover-play svg");
+                const showPlayIcon = () => { if (coverPlayIcon) coverPlayIcon.innerHTML = '<path d="m9 5 10 7-10 7z"/>'; };
+                const showPauseIcon = () => { if (coverPlayIcon) coverPlayIcon.innerHTML = '<path d="M7 5h3v14H7zM14 5h3v14h-3z"/>'; };
                 audio.addEventListener("play", () => {
                     status.textContent = "Playing";
                     card.classList.add("is-playing");
+                    showPauseIcon();
                 });
                 audio.addEventListener("pause", () => {
                     if (!audio.ended) status.textContent = "Paused";
                     card.classList.remove("is-playing");
+                    showPlayIcon();
                 });
                 audio.addEventListener("ended", () => {
                     status.textContent = "Finished";
                     card.classList.remove("is-playing");
+                    showPlayIcon();
                     progress.style.width = "0%";
                 });
                 coverButton.addEventListener("click", async () => {
@@ -1560,7 +1566,7 @@ function normalizePostText(value) {
     return String(value ?? "")
         .replace(/\r\n?/g, "\n")
         .split("\n")
-        .map(line => line.replace(/^[\\t ]+/, "").replace(/[\\t ]+$/, ""))
+        .map(line => line.trim())
         .join("\n")
         .trim();
 }
