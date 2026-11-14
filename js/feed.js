@@ -459,9 +459,7 @@ async function loadKiKiFeed() {
 
             <p class="post-content">
 
-                ${escapeHTML(
-                    post.content || ""
-                )}
+                ${escapeHTML(normalizePostText(post.content || ""))}
 
             </p>
 
