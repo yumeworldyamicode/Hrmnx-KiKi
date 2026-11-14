@@ -803,7 +803,7 @@ function normalizePostText(value) {
     return String(value ?? "")
         .replace(/\r\n?/g, "\n")
         .split("\n")
-        .map(line => line.replace(/^[\\t ]+/, "").replace(/[\\t ]+$/, ""))
+        .map(line => line.trim())
         .join("\n")
         .trim();
 }
