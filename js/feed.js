@@ -684,10 +684,7 @@ async function togglePostLike(
         );
 
 
-        button.classList.remove("liked");
-
-
-        const count =
+                const count =
             button.querySelector("span");
 
 
@@ -741,10 +738,7 @@ async function togglePostLike(
     );
 
 
-    button.classList.add("liked");
-
-
-    const count =
+        const count =
         button.querySelector("span");
 
 
@@ -938,9 +932,7 @@ async function react(button) {
             "reacted"
         );
 
-        button.classList.remove("reacted");
-
-        number.textContent =
+                number.textContent =
             Math.max(
                 0,
                 count - 1
@@ -978,9 +970,7 @@ async function react(button) {
         "reacted"
     );
 
-    button.classList.add("reacted");
-
-    number.textContent =
+        number.textContent =
         count + 1;
 }
 
