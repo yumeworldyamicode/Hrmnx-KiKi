@@ -242,7 +242,9 @@
 
             line-height: 1.8;
 
-            white-space: pre-wrap;
+            white-space: pre-line;
+            text-indent: 0;
+            padding-left: 0;
 
         }
 
@@ -746,6 +748,15 @@
      * =========================================
      */
 
+    function normalizePostText(value) {
+        return String(value ?? "")
+            .replace(/\r\n?/g, "\n")
+            .split("\n")
+            .map(line => line.replace(/^\s+/, "").replace(/\s+$/, ""))
+            .join("\n")
+            .trim();
+    }
+
     function escapeHTML(value) {
 
         const div =
@@ -953,9 +964,7 @@ function goBackToKiKi() {
 
                 <div class="post-content">
 
-                    ${escapeHTML(
-                        post.content || ""
-                    )}
+                    ${escapeHTML(normalizePostText(post.content || ""))}
 
                 </div>
 
