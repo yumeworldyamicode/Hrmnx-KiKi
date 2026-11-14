@@ -528,11 +528,7 @@ async function loadKiKiFeed() {
                     onclick="togglePostLike(event, this)"
                 >
 
-                    ${
-                        isLiked
-                            ? "♥"
-                            : "♡"
-                    }
+                    <svg class="reaction-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 8.8c0 5.1-8.4 10.1-8.4 10.1S3.6 13.9 3.6 8.8a4.4 4.4 0 0 1 8.4-1.7 4.4 4.4 0 0 1 8.4 1.7Z"/></svg>
 
                     <span>
                         ${likeCount}
@@ -688,8 +684,7 @@ async function togglePostLike(
         );
 
 
-        button.childNodes[0].textContent =
-            "♡ ";
+        button.classList.remove("liked");
 
 
         const count =
@@ -746,8 +741,7 @@ async function togglePostLike(
     );
 
 
-    button.childNodes[0].textContent =
-        "♥ ";
+    button.classList.add("liked");
 
 
     const count =
@@ -944,8 +938,7 @@ async function react(button) {
             "reacted"
         );
 
-        button.firstChild.textContent =
-            "♡";
+        button.classList.remove("reacted");
 
         number.textContent =
             Math.max(
@@ -985,8 +978,7 @@ async function react(button) {
         "reacted"
     );
 
-    button.firstChild.textContent =
-        "♥";
+    button.classList.add("reacted");
 
     number.textContent =
         count + 1;
