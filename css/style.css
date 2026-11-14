@@ -340,3 +340,37 @@ body.home-page {
     transform: translateY(6px);
 }
 
+
+
+/* MOBILE LAYOUT - OUTER KIKI SHELL */
+.mobile-nav-toggle{display:none;width:42px;height:42px;padding:10px;border:1px solid rgba(255,255,255,.55);border-radius:12px;background:rgba(255,255,255,.45);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer;flex-shrink:0}
+.mobile-nav-toggle span{display:block;width:19px;height:2px;border-radius:2px;background:#fff;transition:transform .2s ease,opacity .2s ease}
+.mobile-nav-toggle.is-open span:first-child{transform:translateY(7px) rotate(45deg)}
+.mobile-nav-toggle.is-open span:nth-child(2){opacity:0}
+.mobile-nav-toggle.is-open span:last-child{transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:768px){
+ header{min-height:68px;padding:10px 14px;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+ header .logo{width:auto;min-width:0;display:flex;align-items:center}
+ header .logo img{display:block;width:58px!important;height:auto;max-height:45px;object-fit:contain}
+ .mobile-nav-toggle{display:flex}
+ header nav{display:none;position:absolute;top:calc(100% + 8px);left:12px;right:12px;padding:12px;flex-direction:column;align-items:stretch;gap:0;border:1px solid rgba(255,255,255,.45);border-radius:16px;background:rgba(90,180,220,.94);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 14px 35px rgba(0,0,0,.18)}
+ header nav.mobile-open{display:flex}
+ header nav a{display:block;padding:12px 14px;font-size:22px;line-height:1.2;border-radius:10px}
+ header nav a:active{background:rgba(255,255,255,.14)}
+ .account-container{justify-self:end;min-width:0}
+ .login-button{display:inline-flex;align-items:center;justify-content:center;max-width:150px;min-height:40px;padding:7px 11px;overflow:hidden;font-size:13px!important;text-overflow:ellipsis}
+ .login-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .header-profile-picture{width:25px;height:25px;margin-right:5px}
+ .account-dropdown{position:fixed;top:74px;right:12px;width:min(250px,calc(100vw - 24px))}
+ .main-container{width:100%;min-height:100dvh;padding:82px 10px 10px;display:flex}
+ .iframe-wrapper{width:100%;max-width:none;height:calc(100dvh - 92px);min-height:420px;border-radius:15px}
+ #pageFrame{width:100%;height:100%}
+}
+@media(max-width:380px){
+ header{padding-left:10px;padding-right:10px;gap:7px}
+ header .logo img{width:50px!important}
+ .login-button{max-width:125px;font-size:12px!important}
+ .mobile-nav-toggle{width:38px;height:38px}
+ .main-container{padding-left:7px;padding-right:7px}
+ .iframe-wrapper{height:calc(100dvh - 88px)}
+}
