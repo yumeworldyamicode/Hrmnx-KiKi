@@ -1081,16 +1081,12 @@ async function loadIndmPublications() {
     if (!tabButton || !container || !profile) return;
 
     try {
-        // Verified identities are the normal access path. Artist-type KiKi
-        // profiles are also eligible so their own public DEMs are not hidden
-        // just because a separate verification row has not been linked yet.
         const { data: verified, error: verifyError } = await supabaseClient
             .from("in_music_verified_artists")
             .select("artist_name")
             .eq("user_id", profile.id)
             .eq("verified", true)
             .maybeSingle();
-
         if (verifyError) throw verifyError;
 
         const isArtistProfile = profile.profile_type === "artist";
@@ -1102,17 +1098,16 @@ async function loadIndmPublications() {
         const artistName = verified?.artist_name || artist?.name || "";
         const requests = [
             supabaseClient.from("indesign_dems")
-                .select("slug,title,artist,cover_path,created_at")
+                .select("slug,title,artist,cover_path,package_path,created_at")
                 .eq("owner_id", profile.id)
                 .eq("visibility", "public")
                 .order("created_at", { ascending: false })
                 .limit(60)
         ];
-
         if (artistName) {
             requests.push(
                 supabaseClient.from("indesign_dems")
-                    .select("slug,title,artist,cover_path,created_at")
+                    .select("slug,title,artist,cover_path,package_path,created_at")
                     .eq("artist", artistName)
                     .eq("visibility", "public")
                     .order("created_at", { ascending: false })
@@ -1121,9 +1116,7 @@ async function loadIndmPublications() {
         }
 
         const results = await Promise.all(requests);
-        for (const result of results) {
-            if (result.error) throw result.error;
-        }
+        for (const result of results) if (result.error) throw result.error;
 
         const bySlug = new Map();
         results.forEach(result => (result.data || []).forEach(item => bySlug.set(item.slug, item)));
@@ -1136,48 +1129,189 @@ async function loadIndmPublications() {
             return;
         }
 
-        container.innerHTML = '<div class="indm-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> INDESIGN PUBLICATIONS</div>';
+        container.innerHTML = "";
         const intro = document.createElement("p");
         intro.className = "indm-intro";
         intro.textContent = "Music ideas, DEM releases and synced lyric experiences published through Nemawashi indesign.";
         container.appendChild(intro);
 
-        publications.forEach(item => {
+        let activeAudio = null;
+        const objectUrls = [];
+        window.addEventListener("pagehide", () => objectUrls.forEach(url => URL.revokeObjectURL(url)), { once: true });
+
+        async function prepareDem(item) {
             const card = document.createElement("article");
             card.className = "indm-publication";
-
-            const cover = item.cover_path
-                ? supabaseClient.storage.from("in-music-artwork").getPublicUrl(item.cover_path).data.publicUrl
-                : "";
-
-            const postUrl = "https://nemawashi.hrmnx.site/app/in-music/post.html?id=" + encodeURIComponent(item.slug);
-            const lyricsUrl = "https://nemawashi.hrmnx.site/app/indesign/dem.html?id=" + encodeURIComponent(item.slug);
-
             card.innerHTML = `
-                ${cover
-                    ? `<img class="indm-cover" src="${escapeAttribute(cover)}" alt="${escapeAttribute(item.title)}">`
-                    : `<div class="indm-cover-fallback"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>`}
-                <div class="indm-publication-info">
-                    <h3>${escapeHTML(item.title)}</h3>
-                    <div class="indm-publication-meta">${escapeHTML(item.artist || artistName || "Artist")} · ${formatDate(new Date(item.created_at))}</div>
-                    <div class="indm-actions">
-                        <a class="indm-action" href="${postUrl}" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg>
-                            Publication
-                        </a>
-                        <a class="indm-action" href="${lyricsUrl}" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h11M4 18h8"/></svg>
-                            Synced lyrics &amp; player
-                        </a>
+                <div class="indm-publication-top">
+                    <button class="indm-cover-button" type="button" aria-label="Play ${escapeAttribute(item.title)}">
+                        <span class="indm-cover-placeholder" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                        </span>
+                        <span class="indm-cover-play" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="m9 5 10 7-10 7z"/></svg>
+                        </span>
+                    </button>
+                    <div class="indm-publication-info">
+                        <h3>${escapeHTML(item.title)}</h3>
+                        <div class="indm-publication-meta">${escapeHTML(item.artist || artistName || "Artist")} · ${formatDate(new Date(item.created_at))}</div>
+                        <div class="indm-play-status">Preparing audio…</div>
                     </div>
                 </div>
+                <div class="indm-audio-progress" aria-hidden="true"><span></span></div>
+                <div class="indm-lyrics-panel">
+                    <div class="indm-lyrics-heading">SYNCED LYRICS</div>
+                    <div class="indm-lyrics-current"><span class="indm-lyrics-placeholder">Lyrics will appear here when playback starts.</span></div>
+                </div>
+                <a class="indm-publication-link" href="https://nemawashi.hrmnx.site/app/in-music/post.html?id=${encodeURIComponent(item.slug)}" target="_blank" rel="noopener noreferrer">View publication</a>
             `;
             container.appendChild(card);
-        });
+
+            const coverButton = card.querySelector(".indm-cover-button");
+            const status = card.querySelector(".indm-play-status");
+            const progress = card.querySelector(".indm-audio-progress span");
+            const lyricsBox = card.querySelector(".indm-lyrics-current");
+            let audio = null;
+            let rules = [];
+            let lastActive = -1;
+
+            const coverUrl = item.cover_path
+                ? supabaseClient.storage.from("in-music-artwork").getPublicUrl(item.cover_path).data.publicUrl
+                : "";
+            if (coverUrl) {
+                const img = document.createElement("img");
+                img.className = "indm-cover";
+                img.src = coverUrl;
+                img.alt = item.title + " album cover";
+                img.loading = "lazy";
+                coverButton.prepend(img);
+                card.querySelector(".indm-cover-placeholder").remove();
+            }
+
+            try {
+                const { data: record, error: recordError } = await supabaseClient
+                    .rpc("get_indesign_dem_by_slug", { dem_slug: item.slug })
+                    .maybeSingle();
+                if (recordError) throw recordError;
+                if (!record?.package_path) throw new Error("Audio package unavailable.");
+
+                const { data: packageBlob, error: packageError } = await supabaseClient
+                    .storage.from("indesign-dems").download(record.package_path);
+                if (packageError) throw packageError;
+
+                if (!window.JSZip) throw new Error("Audio package reader unavailable.");
+                const zip = await JSZip.loadAsync(packageBlob);
+                const manifestFile = zip.file("manifest.json");
+                if (!manifestFile) throw new Error("This DEM has no manifest.");
+                const manifest = JSON.parse(await manifestFile.async("string"));
+                rules = (manifest.lyrics?.rules || []).slice().sort((a, b) => Number(a.time || 0) - Number(b.time || 0));
+
+                const audioName = manifest.assets?.audio;
+                const audioFile = audioName ? zip.file("audio/" + audioName) : null;
+                if (!audioFile) throw new Error("No playable audio in this DEM.");
+
+                const rawAudio = await audioFile.async("blob");
+                const ext = (audioName.split(".").pop() || "").toLowerCase();
+                const mime = { mp3:"audio/mpeg", wav:"audio/wav", m4a:"audio/mp4", aac:"audio/aac", ogg:"audio/ogg", flac:"audio/flac", webm:"audio/webm" }[ext] || rawAudio.type || "application/octet-stream";
+                const playableBlob = new Blob([rawAudio], { type: mime });
+                const audioUrl = URL.createObjectURL(playableBlob);
+                objectUrls.push(audioUrl);
+                audio = new Audio(audioUrl);
+                audio.preload = "metadata";
+                status.textContent = "Tap the cover to play";
+                coverButton.disabled = false;
+
+                if (!coverUrl && manifest.assets?.artwork) {
+                    const artFile = zip.file("artwork/" + manifest.assets.artwork);
+                    if (artFile) {
+                        const artBlob = await artFile.async("blob");
+                        const artUrl = URL.createObjectURL(artBlob);
+                        objectUrls.push(artUrl);
+                        const img = document.createElement("img");
+                        img.className = "indm-cover";
+                        img.src = artUrl;
+                        img.alt = item.title + " album cover";
+                        coverButton.prepend(img);
+                        card.querySelector(".indm-cover-placeholder")?.remove();
+                    }
+                }
+
+                function renderLyric(index) {
+                    if (index === lastActive) return;
+                    lastActive = index;
+                    const rule = rules[index];
+                    if (!rule) {
+                        lyricsBox.innerHTML = '<span class="indm-lyrics-placeholder">Waiting for the next lyric…</span>';
+                        return;
+                    }
+                    lyricsBox.innerHTML = "";
+                    const line = document.createElement("div");
+                    line.className = "indm-lyric-enter";
+                    const section = document.createElement("span");
+                    section.className = "indm-lyric-section";
+                    section.textContent = rule.section || "LYRICS";
+                    const original = document.createElement("div");
+                    original.className = "indm-lyric-original";
+                    original.textContent = rule.text || "";
+                    line.append(section, original);
+                    if (rule.romanized) {
+                        const romanized = document.createElement("div");
+                        romanized.className = "indm-lyric-translation";
+                        romanized.textContent = rule.romanized;
+                        line.appendChild(romanized);
+                    }
+                    (rule.translations || []).forEach(translation => {
+                        const translated = document.createElement("div");
+                        translated.className = "indm-lyric-translation";
+                        translated.textContent = translation.text || "";
+                        line.appendChild(translated);
+                    });
+                    lyricsBox.appendChild(line);
+                }
+
+                audio.addEventListener("timeupdate", () => {
+                    const current = audio.currentTime;
+                    let active = -1;
+                    rules.forEach((rule, index) => {
+                        if (Number(rule.time || 0) <= current) active = index;
+                    });
+                    renderLyric(active);
+                    if (audio.duration) progress.style.width = (current / audio.duration * 100) + "%";
+                });
+                audio.addEventListener("play", () => {
+                    status.textContent = "Playing";
+                    card.classList.add("is-playing");
+                });
+                audio.addEventListener("pause", () => {
+                    if (!audio.ended) status.textContent = "Paused";
+                    card.classList.remove("is-playing");
+                });
+                audio.addEventListener("ended", () => {
+                    status.textContent = "Finished";
+                    card.classList.remove("is-playing");
+                    progress.style.width = "0%";
+                });
+                coverButton.addEventListener("click", async () => {
+                    if (activeAudio && activeAudio !== audio) activeAudio.pause();
+                    if (audio.paused) {
+                        activeAudio = audio;
+                        try { await audio.play(); }
+                        catch (error) { status.textContent = "Playback was blocked. Tap again to play."; console.error(error); }
+                    } else {
+                        audio.pause();
+                    }
+                });
+            } catch (error) {
+                console.error("Could not prepare INDM DEM:", item.slug, error);
+                coverButton.disabled = true;
+                status.textContent = "Audio unavailable";
+                if (rules.length) lyricsBox.innerHTML = '<span class="indm-lyrics-placeholder">Synced lyrics are available in the DEM player.</span>';
+            }
+        }
+
+        await Promise.all(publications.map(prepareDem));
     } catch (error) {
         console.error("Could not load INDM publications:", error);
-        // Keep the tab discoverable when the profile is eligible, and show
-        // a useful fallback instead of silently hiding the feature.
         if (profile.profile_type === "artist") tabButton.style.display = "inline-flex";
         container.innerHTML = '<div class="empty-state">INDM publications are temporarily unavailable.</div>';
     }
@@ -1283,10 +1417,7 @@ data.forEach(
 
             <div class="post-text">
 
-                ${escapeHTML(
-                    post.content ||
-                    ""
-                )}
+                ${escapeHTML(normalizePostText(post.content || ""))}
 
             </div>
 
@@ -1424,6 +1555,15 @@ function formatDate(date) {
 /* =========================================
    HTML ESCAPING
 ========================================= */
+
+function normalizePostText(value) {
+    return String(value ?? "")
+        .replace(/\r\n?/g, "\n")
+        .split("\n")
+        .map(line => line.replace(/^[\\t ]+/, "").replace(/[\\t ]+$/, ""))
+        .join("\n")
+        .trim();
+}
 
 function escapeHTML(value) {
 
