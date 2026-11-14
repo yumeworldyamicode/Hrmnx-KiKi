@@ -185,6 +185,7 @@ async function loadProfile() {
             await loadArtist();
 
             await loadReleases();
+            await loadIndmPublications();
 
         }
 
@@ -1063,6 +1064,107 @@ async function renderMusic() {
 
     }
 
+}
+
+
+/* =========================================
+   INDM / INDESIGN PUBLICATIONS
+========================================= */
+
+async function loadIndmPublications() {
+    const tabButton = document.getElementById("indm-tab-button");
+    const container = document.getElementById("indm-content");
+    if (!tabButton || !container || !profile || profile.profile_type !== "artist") return;
+
+    try {
+        // Only Nemawashi-verified artist identities receive this tab.
+        const { data: verified, error: verifyError } = await supabaseClient
+            .from("in_music_verified_artists")
+            .select("artist_name")
+            .eq("user_id", profile.id)
+            .eq("verified", true)
+            .maybeSingle();
+
+        if (verifyError) throw verifyError;
+        if (!verified) return;
+
+        tabButton.style.display = "block";
+        container.innerHTML = '<div class="empty-state">Loading INDM publications...</div>';
+
+        // Include publications owned by this account and releases credited to the verified artist name.
+        const results = await Promise.all([
+            supabaseClient.from("indesign_dems")
+                .select("slug,title,artist,cover_path,created_at")
+                .eq("owner_id", profile.id)
+                .eq("visibility", "public")
+                .order("created_at", { ascending: false })
+                .limit(60),
+            supabaseClient.from("indesign_dems")
+                .select("slug,title,artist,cover_path,created_at")
+                .eq("artist", verified.artist_name)
+                .eq("visibility", "public")
+                .order("created_at", { ascending: false })
+                .limit(60)
+        ]);
+
+        for (const result of results) {
+            if (result.error) throw result.error;
+        }
+
+        const bySlug = new Map();
+        results.forEach(result => (result.data || []).forEach(item => bySlug.set(item.slug, item)));
+        const publications = [...bySlug.values()].sort((a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+
+        if (!publications.length) {
+            container.innerHTML = '<div class="empty-state">No public indesign publications yet.</div>';
+            return;
+        }
+
+        container.innerHTML = '<div class="indm-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> INDESIGN PUBLICATIONS</div>';
+        const intro = document.createElement("p");
+        intro.className = "indm-intro";
+        intro.textContent = "Music ideas, DEM releases and synced lyric experiences published through Nemawashi indesign.";
+        container.appendChild(intro);
+
+        publications.forEach(item => {
+            const card = document.createElement("article");
+            card.className = "indm-publication";
+
+            const cover = item.cover_path
+                ? supabaseClient.storage.from("in-music-artwork").getPublicUrl(item.cover_path).data.publicUrl
+                : "";
+
+            const postUrl = "https://nemawashi.hrmnx.site/app/in-music/post.html?id=" + encodeURIComponent(item.slug);
+            const lyricsUrl = "https://nemawashi.hrmnx.site/app/indesign/dem.html?id=" + encodeURIComponent(item.slug);
+
+            card.innerHTML = `
+                ${cover
+                    ? `<img class="indm-cover" src="${escapeAttribute(cover)}" alt="${escapeAttribute(item.title)}">`
+                    : `<div class="indm-cover-fallback"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>`}
+                <div class="indm-publication-info">
+                    <h3>${escapeHTML(item.title)}</h3>
+                    <div class="indm-publication-meta">${escapeHTML(item.artist || verified.artist_name)} · ${formatDate(new Date(item.created_at))}</div>
+                    <div class="indm-actions">
+                        <a class="indm-action" href="${postUrl}" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg>
+                            Publication
+                        </a>
+                        <a class="indm-action" href="${lyricsUrl}" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h11M4 18h8"/></svg>
+                            Synced lyrics &amp; player
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error("Could not load INDM publications:", error);
+        tabButton.style.display = "block";
+        container.innerHTML = '<div class="empty-state">INDM publications are temporarily unavailable.</div>';
+    }
 }
 
 
