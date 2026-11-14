@@ -185,9 +185,13 @@ async function loadProfile() {
             await loadArtist();
 
             await loadReleases();
-            await loadIndmPublications();
 
         }
+
+        // INDM access is based on the verified-artist record, not the
+        // general KiKi profile_type. A verified creator may still have
+        // a regular "user" profile type.
+        await loadIndmPublications();
 
 
         /* =========================================
@@ -1074,7 +1078,7 @@ async function renderMusic() {
 async function loadIndmPublications() {
     const tabButton = document.getElementById("indm-tab-button");
     const container = document.getElementById("indm-content");
-    if (!tabButton || !container || !profile || profile.profile_type !== "artist") return;
+    if (!tabButton || !container || !profile) return;
 
     try {
         // Only Nemawashi-verified artist identities receive this tab.
