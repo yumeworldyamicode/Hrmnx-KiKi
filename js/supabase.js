@@ -12,3 +12,6 @@ const supabaseClient = window.supabase.createClient(
         }
     }
 );
+
+// Expose the shared client for scripts that access it through window.
+window.supabaseClient = supabaseClient;
