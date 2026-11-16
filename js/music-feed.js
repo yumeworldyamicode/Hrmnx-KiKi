@@ -210,11 +210,13 @@
     }
     const full=$("kikiMusicLyricsFull");
     if(full) {
+      const previousIndex=full.dataset.activeIndex;
       full.querySelectorAll("[data-lyric-index]").forEach((line,index)=>{
         const isCurrent=index===current;
         line.classList.toggle("active",isCurrent);
-        if(isCurrent && full.dataset.autoScroll==="true" && full.dataset.activeIndex!==String(current)) line.scrollIntoView({block:"nearest",behavior:"smooth"});
+        if(isCurrent && full.dataset.autoScroll==="true" && previousIndex!==String(current)) line.scrollIntoView({block:"nearest",behavior:"smooth"});
       });
+      full.dataset.activeIndex=String(current);
     }
     renderMini();
   }
@@ -252,6 +254,7 @@
       const box=$("kikiMusicLyricsFull"),open=box.hidden;
       box.hidden=!open;
       box.dataset.autoScroll="true";
+      if(open) delete box.dataset.activeIndex;
       $("kikiMusicLyricsToggle").textContent=open?"Hide full lyrics":"View full lyrics";
       if(open) renderLyrics();
     });
@@ -263,6 +266,7 @@
     });
     $("kikiMusicLyricsPreview").addEventListener("click",()=>{
       $("kikiMusicLyricsFull").hidden=false;
+      delete $("kikiMusicLyricsFull").dataset.activeIndex;
       $("kikiMusicLyricsToggle").textContent="Hide full lyrics";
       renderLyrics();
     });
