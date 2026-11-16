@@ -77,7 +77,7 @@
     feed.innerHTML = '<div class="kiki-music-state">Loading music…</div>';
     try {
       const {data,error} = await client.from("indesign_dems")
-        .select("slug,title,artist,description,created_at,cover_path,package_path,owner_id,contributions")
+        .select("slug,title,artist,description,created_at,cover_path,package_path,owner_id")
         .eq("visibility","public")
         .eq("is_public",true)
         .order("created_at",{ascending:false})
@@ -190,6 +190,7 @@
     $("kikiMiniArtist").textContent=active.item.artist || "Unknown artist";
     $("kikiMiniPlay").textContent=active.audio.paused ? "▶" : "Ⅱ";
     $("kikiMiniProgress").style.width=active.audio.duration ? (active.audio.currentTime/active.audio.duration*100)+"%" : "0%";
+    $("kikiMiniSeek").value=active.audio.duration ? Math.round(active.audio.currentTime/active.audio.duration*1000) : 0;
     $("kikiMiniTime").textContent=fmt(active.audio.currentTime);
     $("kikiMiniDuration").textContent=fmt(active.audio.duration);
   }
@@ -212,7 +213,7 @@
       full.querySelectorAll("[data-lyric-index]").forEach((line,index)=>{
         const isCurrent=index===current;
         line.classList.toggle("active",isCurrent);
-        if(isCurrent && full.dataset.autoScroll==="true") line.scrollIntoView({block:"nearest",behavior:"smooth"});
+        if(isCurrent && full.dataset.autoScroll==="true" && full.dataset.activeIndex!==String(current)) line.scrollIntoView({block:"nearest",behavior:"smooth"});
       });
     }
     renderMini();
@@ -279,24 +280,24 @@
         $("kikiMusicArtist").title="This artist does not have a linked KiKi artist profile yet.";
       }
     });
-    track.audio.addEventListener("timeupdate",()=>{
+    track.audio.ontimeupdate=()=>{
       const seek=$("kikiMusicSeek"),clock=$("kikiMusicClock");
       if(seek && track.audio.duration) seek.value=Math.round(track.audio.currentTime/track.audio.duration*1000);
       if(clock) clock.textContent=fmt(track.audio.currentTime)+" / "+fmt(track.audio.duration);
       renderLyrics();
-    });
-    track.audio.addEventListener("play",()=>{
+    };
+    track.audio.onplay=()=>{
       const button=$("kikiMusicPlay");if(button)button.textContent="Ⅱ";
       renderMini();
-    });
-    track.audio.addEventListener("pause",()=>{
+    };
+    track.audio.onpause=()=>{
       const button=$("kikiMusicPlay");if(button)button.textContent="▶";
       renderMini();
-    });
-    track.audio.addEventListener("ended",()=>{
+    };
+    track.audio.onended=()=>{
       const button=$("kikiMusicPlay");if(button)button.textContent="▶";
       renderLyrics();
-    });
+    };
     renderMini();renderLyrics();
     if(track.audio.duration) $("kikiMusicClock").textContent="0:00 / "+fmt(track.audio.duration);
     track.audio.addEventListener("loadedmetadata",()=>{
@@ -352,10 +353,9 @@
     button.addEventListener("click",()=>{
       const music=button.dataset.kikiFeed==="music";
       document.body.classList.toggle("kiki-music-mode",music);
-      document.querySelectorAll("[data-kiki-feed]").forEach(b=>b.classList.toggle("active",b===button));
+      document.querySelectorAll("[data-kiki-feed]").forEach(b=>{b.classList.toggle("active",b===button);b.setAttribute("aria-selected",String(b===button));});
       if(music) loadFeed();
       else closePost();
     });
   });
-  loadFeed();
 })();
