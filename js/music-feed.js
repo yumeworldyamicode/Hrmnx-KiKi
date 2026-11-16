@@ -244,7 +244,7 @@
           '</div>'+
         '</section>'+
         '<section class="kiki-music-credits"><small>CREDITS</small><h2>Behind the music</h2>'+creditHTML+'</section>'+
-        '<a class="kiki-music-powered" href="https://nemawashi.hrmnx.site/app/in-music/post.html?id='+encodeURIComponent(item.slug)+'" target="_blank" rel="noopener"><span>Play in</span><strong>in. music</strong><span class="kiki-music-powered-arrow">↗</span></a>'+
+        '<a class="kiki-music-powered" href="https://nemawashi.hrmnx.site/app/in-music/post.html?id='+encodeURIComponent(item.slug)+'" target="_blank" rel="noopener"><span>Play in</span><strong>in. music</strong><svg class="kiki-music-powered-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"/></svg></a>'+
       '</div>';
     postView.hidden=false;
     requestAnimationFrame(()=>postView.classList.add("is-open"));
