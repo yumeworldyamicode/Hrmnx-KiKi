@@ -1976,7 +1976,7 @@ function renderSearchResults(data) {
                             class="search-result-image"
                             src="${escapeSearchAttribute(
                                 profile.avatar_url ||
-                                "images/default-avatar.png"
+                                "images/default-avatar.svg"
                             )}"
                             alt=""
                         >
@@ -2543,7 +2543,7 @@ async function initializeUserPostCreator() {
         "composerAvatar"
     ).src =
         profile.avatar_url ||
-        "images/default-avatar.png";
+        "images/default-avatar.svg";
 
 
     await loadPostArtists();
