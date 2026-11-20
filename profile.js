@@ -8,7 +8,7 @@ let artist = null;
 let releases = [];
 
 let countdownIntervals = [];
-const KIKI_DEFAULT_AVATAR = "images/default-avatar.png";
+const KIKI_DEFAULT_AVATAR = "images/default-avatar.svg";
 const NEMAWASHI_LOGO_BADGE = "https://nemawashi.hrmnx.site/images/nemawashi-logo.png";
 
 
