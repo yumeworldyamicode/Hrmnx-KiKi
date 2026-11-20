@@ -56,8 +56,13 @@ async function loadAccount() {
     }
 
 
-    currentProfile =
-        profile;
+    if (!profile.avatar_url) {
+        profile.avatar_url = profile.is_staff ? NEMAWASHI_LOGO_BADGE : KIKI_DEFAULT_AVATAR;
+        const { error: avatarSyncError } = await supabaseClient.from("profiles").update({ avatar_url: profile.avatar_url }).eq("id", currentUser.id);
+        if (avatarSyncError) console.warn("Default avatar sync failed:", avatarSyncError);
+    }
+
+    currentProfile = profile;
 
 
     displayProfile(profile);
