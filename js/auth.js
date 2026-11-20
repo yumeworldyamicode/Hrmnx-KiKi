@@ -1,3 +1,6 @@
+const KIKI_DEFAULT_AVATAR = "images/default-avatar.png";
+const NEMAWASHI_LOGO_BADGE = "https://nemawashi.hrmnx.site/images/nemawashi-logo.png";
+
 async function updateAuthUI() {
 
     const loginButton =
@@ -76,14 +79,23 @@ async function updateAuthUI() {
     }
 
 
+    let effectiveAvatar = profile.avatar_url;
+    if (!effectiveAvatar) {
+        effectiveAvatar = profile.is_staff ? NEMAWASHI_LOGO_BADGE : KIKI_DEFAULT_AVATAR;
+        const { error: avatarSyncError } = await supabaseClient
+            .from("profiles")
+            .update({ avatar_url: effectiveAvatar })
+            .eq("id", user.id);
+        if (avatarSyncError) console.warn("KiKi default avatar sync failed:", avatarSyncError);
+    }
+
     const displayName =
         profile.display_name ||
         profile.username ||
         user.email.split("@")[0];
 
 
-    const avatar =
-        profile.avatar_url;
+    const avatar = effectiveAvatar;
 
 
     /* =========================
@@ -122,10 +134,10 @@ async function updateAuthUI() {
         loginButton.innerHTML += `
 
             <img
-                src="images/Kikifficial.gif"
+                src="${NEMAWASHI_LOGO_BADGE}"
                 class="kikifficial-header-badge"
-                alt="KiKifficial"
-                title="Staff member"
+                alt="Nemawashi employee"
+                title="Hrmnx employee"
             >
 
         `;
