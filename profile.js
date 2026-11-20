@@ -8,6 +8,8 @@ let artist = null;
 let releases = [];
 
 let countdownIntervals = [];
+const KIKI_DEFAULT_AVATAR = "images/default-avatar.png";
+const NEMAWASHI_LOGO_BADGE = "https://nemawashi.hrmnx.site/images/nemawashi-logo.png";
 
 
 /* =========================================
@@ -308,17 +310,8 @@ function displayProfile(profile) {
         );
 
 
-    if (profile.avatar_url) {
-
-        avatar.src =
-            profile.avatar_url;
-
-    } else {
-
-        avatar.style.display =
-            "none";
-
-    }
+    avatar.src = profile.avatar_url || (profile.is_staff ? NEMAWASHI_LOGO_BADGE : KIKI_DEFAULT_AVATAR);
+    avatar.style.display = "block";
 
 
     /* ================================
