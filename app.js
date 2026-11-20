@@ -11,7 +11,7 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const googleButton = document.getElementById("google-btn");
 const message = document.getElementById("message");
-const KIKI_DEFAULT_AVATAR = "images/default-avatar.png";
+const KIKI_DEFAULT_AVATAR = "images/default-avatar.svg";
 
 
 /* =========================================================
