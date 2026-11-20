@@ -66,6 +66,7 @@ signupForm.addEventListener("submit", async function(event) {
                 password: password,
 
                 options: {
+                    data: { avatar_url: KIKI_DEFAULT_AVATAR },
                     emailRedirectTo:
                         window.location.origin + "/"
                 }
