@@ -15,6 +15,13 @@
   let active = null;
   let objectUrls = [];
   let currentAccent = "#d9d4eb";
+  if(!document.getElementById("kiki-music-choreo-preview-style")){
+    const styleTag=document.createElement("style");
+    styleTag.id="kiki-music-choreo-preview-style";
+    styleTag.textContent=".kiki-music-card-art{position:relative;overflow:hidden}.kiki-music-choreo-preview{position:absolute;right:7px;bottom:7px;display:flex;align-items:flex-end;justify-content:center;gap:2px;max-width:64%;min-height:32px;padding:5px 7px 4px;background:rgba(255,255,255,.84);border:1px solid rgba(20,20,20,.12);backdrop-filter:blur(4px);border-radius:4px;pointer-events:none}.kiki-music-choreo-preview svg{width:13px;height:23px;display:block;overflow:visible;shape-rendering:geometricPrecision;color:#202020}.kiki-music-choreo-preview svg.bg{color:#999}.kiki-music-choreo-count{align-self:center;margin-left:3px;font-size:8px;font-weight:700;color:#666;white-space:nowrap}.kiki-music-choreo-label{position:absolute;left:7px;bottom:7px;padding:4px 6px;background:#111;color:#fff;font-size:7px;letter-spacing:.7px;pointer-events:none}";
+    document.head.appendChild(styleTag);
+  }
+  function choreoIcon(person){const f=person.gender==="female";return '<svg viewBox="0 0 44 68" aria-hidden="true" class="'+(person.kind==="background"?"bg":"")+'"><g fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="22" cy="8" r="5.5" fill="currentColor" stroke="none"/><path d="M22 16.5v17.5M22 20 11.5 28.5 8.5 20.5M22 20 32.5 28.5 35.5 20.5"/>'+(f?'<path d="M16.2 22.5h11.6l5.1 12.1H11.1Z" fill="currentColor" stroke="none"/>':'<path d="M18 34 17 48 13 62M26 34 27 48 31 62"/>')+'</g>'+(f?'<g fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round"><path d="M18.5 34.5 17 48 13 62M25.5 34.5 27 48 31 62"/></g>':'')+'</svg>';}
 
   function storageCover(item) {
     return item.cover_path
@@ -60,9 +67,12 @@
     }
     feed.innerHTML = publications.map((item,index) => {
       const cover = storageCover(item);
+      const choreo=Array.isArray(item.choreography?.characters)?item.choreography.characters:[];
+      const choreoPreview=choreo.length?'<span class="kiki-music-choreo-preview" aria-hidden="true">'+choreo.slice(0,5).map(choreoIcon).join("")+(choreo.length>5?'<span class="kiki-music-choreo-count">+'+(choreo.length-5)+'</span>':'')+'</span><span class="kiki-music-choreo-label">CHOREOGRAPHY</span>':'';
       return '<button class="kiki-music-card" type="button" data-music-open="'+index+'">'+
         '<span class="kiki-music-card-art">'+
           (cover ? '<img src="'+esc(cover)+'" alt="" loading="lazy">' : '<span class="kiki-music-art-placeholder"><span>in.</span></span>')+
+          choreoPreview+
           '<span class="kiki-music-card-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 5 12 7-12 7z"/></svg></span>'+
         '</span>'+
         '<span class="kiki-music-card-title">'+esc(item.title || "Untitled")+'</span>'+
@@ -77,7 +87,7 @@
     feed.innerHTML = '<div class="kiki-music-state">Loading music…</div>';
     try {
       const {data,error} = await client.from("indesign_dems")
-        .select("slug,title,artist,description,created_at,cover_path,package_path,owner_id")
+        .select("slug,title,artist,description,created_at,cover_path,package_path,owner_id,choreography")
         .eq("visibility","public")
         .eq("is_public",true)
         .order("created_at",{ascending:false})
